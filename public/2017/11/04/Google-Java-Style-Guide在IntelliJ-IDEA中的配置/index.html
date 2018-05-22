@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Google Java Style Guide在IntelliJ IDEA中的配置 | voidAlex的记事本 | 长路漫漫，唯剑作伴</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="配置,杂记">
+    <meta name="description" content="这是voidAlex原创的第十二篇博文。">
+<meta name="keywords" content="配置,杂记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Google Java Style Guide在IntelliJ IDEA中的配置">
+<meta property="og:url" content="https://voidalex.one/2017/11/04/Google-Java-Style-Guide在IntelliJ-IDEA中的配置/index.html">
+<meta property="og:site_name" content="voidAlex的记事本">
+<meta property="og:description" content="这是voidAlex原创的第十二篇博文。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://osuro1ft2.bkt.clouddn.com//17-11-4/84524547.jpg">
+<meta property="og:image" content="http://osuro1ft2.bkt.clouddn.com//17-11-4/25350534.jpg">
+<meta property="og:image" content="http://osuro1ft2.bkt.clouddn.com//17-11-4/34945388.jpg">
+<meta property="og:updated_time" content="2017-11-10T09:27:50.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Google Java Style Guide在IntelliJ IDEA中的配置">
+<meta name="twitter:description" content="这是voidAlex原创的第十二篇博文。">
+<meta name="twitter:image" content="http://osuro1ft2.bkt.clouddn.com//17-11-4/84524547.jpg">
+    
+        <link rel="alternate" type="application/atom+xml" title="voidAlex的记事本" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">voidAlex</h5>
+          <a href="mailto:wangld1994@gmail.com" title="wangld1994@gmail.com" class="mail">wangld1994@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签云
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/voidAlex" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                GitHub
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="http://www.weibo.com/wangld1994" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                微博
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-info"></i>
+                关于
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Google Java Style Guide在IntelliJ IDEA中的配置</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Google Java Style Guide在IntelliJ IDEA中的配置</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-11-04T12:01:52.000Z" itemprop="datePublished" class="page-time">
+  2017-11-04
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#下载"><span class="post-toc-number">1.</span> <span class="post-toc-text">下载</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#配置"><span class="post-toc-number">2.</span> <span class="post-toc-text">配置</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-Google-Java-Style-Guide在IntelliJ-IDEA中的配置"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Google Java Style Guide在IntelliJ IDEA中的配置</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-11-04 20:01:52" datetime="2017-11-04T12:01:52.000Z"  itemprop="datePublished">2017-11-04</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>这是voidAlex原创的第十二篇博文。<br><a id="more"></a></p>
+</blockquote>
+<h2 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git <span class="built_in">clone</span> git@github.com:google/styleguide.git</div></pre></td></tr></table></figure>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>在clone的仓库中找到<code>intellij-java-google-style.xml</code>这个文件，然后打开IDEA，<code>File-&gt;Setting-&gt;Editor-&gt;Code Style-&gt;Java</code>，把设置文件导入：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://osuro1ft2.bkt.clouddn.com//17-11-4/84524547.jpg" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>选择文件，然后点ok：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://osuro1ft2.bkt.clouddn.com//17-11-4/25350534.jpg" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>选择Google Style，配置完成：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://osuro1ft2.bkt.clouddn.com//17-11-4/34945388.jpg" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-11-10T09:27:50.000Z" itemprop="dateUpdated">2017-11-10 17:27:50</time>
+</span><br>
+
+
+        
+        原文链接：<a href="/2017/11/04/Google-Java-Style-Guide在IntelliJ-IDEA中的配置/" target="_blank" rel="external">https://voidalex.one/2017/11/04/Google-Java-Style-Guide在IntelliJ-IDEA中的配置/</a><br>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/deed.zh">知识共享 署名-非商业性 4.0 国际协议</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://voidalex.one">
+            <img src="/img/avatar.png" alt="voidAlex">
+            voidAlex
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/杂记/">杂记</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/配置/">配置</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://voidalex.one/2017/11/04/Google-Java-Style-Guide在IntelliJ-IDEA中的配置/&title=《Google Java Style Guide在IntelliJ IDEA中的配置》 — voidAlex的记事本&pic=https://voidalex.one/img/avatar.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://voidalex.one/2017/11/04/Google-Java-Style-Guide在IntelliJ-IDEA中的配置/&title=《Google Java Style Guide在IntelliJ IDEA中的配置》 — voidAlex的记事本&source=
+这是voidAlex原创的第十二篇博文。" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://voidalex.one/2017/11/04/Google-Java-Style-Guide在IntelliJ-IDEA中的配置/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Google Java Style Guide在IntelliJ IDEA中的配置》 — voidAlex的记事本&url=https://voidalex.one/2017/11/04/Google-Java-Style-Guide在IntelliJ-IDEA中的配置/&via=https://voidalex.one" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://voidalex.one/2017/11/04/Google-Java-Style-Guide在IntelliJ-IDEA中的配置/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/11/05/理解Docker中的三大核心概念：镜像、容器、仓库/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">理解Docker中的三大核心概念：镜像、容器、仓库</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/11/04/使用Docker打包和部署Spring-Boot应用/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">使用Docker打包和部署Spring Boot应用</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+<section class="comments" id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+    var disqus_shortname = 'true';
+    lazyScripts.push('//' + disqus_shortname + '.disqus.com/embed.js')
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢客官~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/deed.zh">知识共享 署名-非商业性使用 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>voidAlex &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://voidalex.one/2017/11/04/Google-Java-Style-Guide在IntelliJ-IDEA中的配置/&title=《Google Java Style Guide在IntelliJ IDEA中的配置》 — voidAlex的记事本&pic=https://voidalex.one/img/avatar.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://voidalex.one/2017/11/04/Google-Java-Style-Guide在IntelliJ-IDEA中的配置/&title=《Google Java Style Guide在IntelliJ IDEA中的配置》 — voidAlex的记事本&source=
+这是voidAlex原创的第十二篇博文。" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://voidalex.one/2017/11/04/Google-Java-Style-Guide在IntelliJ-IDEA中的配置/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Google Java Style Guide在IntelliJ IDEA中的配置》 — voidAlex的记事本&url=https://voidalex.one/2017/11/04/Google-Java-Style-Guide在IntelliJ-IDEA中的配置/&via=https://voidalex.one" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://voidalex.one/2017/11/04/Google-Java-Style-Guide在IntelliJ-IDEA中的配置/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACp0lEQVR42u3aQWrEMAwF0Ln/pdttoY3zZVkhhZdVmczYfi5YQvLnEz9fF0/nO1e/+vn5799+Jh48PDy8Q0u/WsT6k6sF5aNVZ19vKB4eHt4c7+pEXf999tCv8tZrxsPDw3sPL89g16OtF528xcPDw/svvOo0eSBJwgweHh7ee3hJUlstTHSKv9XQcqDWgoeHhxfz8kT5PX+P9Pfw8PDw2l315MDdS5f7KXi0Wjw8PLwBXn7g7iXN67Q7v1CVbxYeHh7e87yk0NA54qshJy/mXs6Lh4eHd5SXHMed6wLr0fpNspt14uHh4Q3z8qui1db+XmjJZ4zKEHh4eHiHeHuNrnwpnQsKBwIDHh4e3gCveh2q3/rqhIckMODh4eFN8/KCaT945N/Z2xQ8PDy8Z3hJ+WCvTdVJyk8VL/Dw8PAmeIXENE6mO6WK6lzR+Hh4eHgDvM1MPG6b7Y3QmQUPDw/vGV5VX21NnTriq6UQPDw8vDneeoi88b8XJPKFVht1eHh4eNO8vaM8b/P3W255ARoPDw9vjpf8uFO6rZZZ8wAThR88PDy8MV71EkByuCchpHPJoHA/Ag8PD+8R3t7Vq/yTvECcB5IozuDh4eG1eZ3iaYJJkP3Zb8bBw8PDO8rbK0YkKXK13VXdsmhePDw8vGFeZ1mn3vbDz6f6v8LDw8Nr85IjPk9q98JMtWxxU8bFw8PDG+ZVj+DOBYK8XLv54OHh4R3l9VtfpzY0D0WFt3h4eHgDvIkztpr4Vq9wFXp6eHh4eGO8ZLn50juFg7zgWwgMeHh4eGO8vcQ3eTtdeogCAx4eHt4LeJ1Uu1osrm4uHh4e3vt5eVMtT53z7btB4uHh4Y3x9oqteepcLfX2rzvg4eHhzfH2mv15AaI6TrUxNnKXAQ8PD+/v5xuf/IdcR1ltkgAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '基佬快回来~';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '一起来van♂游戏吧';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

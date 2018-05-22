@@ -1,0 +1,960 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java,算法,机器学习," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="这是voidAlex原创的第四篇博文。源码在我的GitHub">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法笔记：一元线性回归及Java实现">
+<meta property="og:url" content="https://voidalex.github.io/2017/07/23/算法笔记：一元线性回归及Java实现/index.html">
+<meta property="og:site_name" content="voidAlex的记事本">
+<meta property="og:description" content="这是voidAlex原创的第四篇博文。源码在我的GitHub">
+<meta property="og:image" content="http://osuro1ft2.bkt.clouddn.com//17-7-14/7010575.jpg">
+<meta property="og:image" content="http://osuro1ft2.bkt.clouddn.com//17-7-14/92659690.jpg">
+<meta property="og:updated_time" content="2017-07-31T01:44:26.214Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="算法笔记：一元线性回归及Java实现">
+<meta name="twitter:description" content="这是voidAlex原创的第四篇博文。源码在我的GitHub">
+<meta name="twitter:image" content="http://osuro1ft2.bkt.clouddn.com//17-7-14/7010575.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '9J6GLYQ2JR',
+      apiKey: 'ca5543e1dfbd04450c856020346f62d8',
+      indexName: 'blog',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"站内搜索","hits_empty":"没有找到关于“${query}”的内容，换个关键字试试吧","hits_stats":"${time}ms内搜索到了${hits}条结果"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://voidalex.github.io/2017/07/23/算法笔记：一元线性回归及Java实现/"/>
+
+
+
+
+
+  <title> 算法笔记：一元线性回归及Java实现 | voidAlex的记事本 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-102243903-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">voidAlex的记事本</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">长路漫漫，唯剑作伴</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://voidalex.github.io/2017/07/23/算法笔记：一元线性回归及Java实现/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="voidAlex">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="voidAlex的记事本">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                算法笔记：一元线性回归及Java实现
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-23T12:30:50+08:00">
+                2017-07-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/07/23/算法笔记：一元线性回归及Java实现/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/07/23/算法笔记：一元线性回归及Java实现/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv">阅读量：
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>这是voidAlex原创的第四篇博文。<br>源码在<a href="https://github.com/voidAlex/Linear_Regression" target="_blank" rel="external">我的GitHub</a><br><a id="more"></a></p>
+</blockquote>
+<h2 id="回归问题"><a href="#回归问题" class="headerlink" title="回归问题"></a>回归问题</h2><p>回归问题是研究自变量和因变量之间关系的一种预测模型技术。例如我们可以通过回归模型去预测房价与房子面积之间的关系，一个人每周花在微信上的时间和他微信好友数量之间的关系等。</p>
+<p>回归模型定义了输入和输出的关系。输入为现有信息，输出为预测。</p>
+<p>一个预测问题在回归模型下的解决步骤为：</p>
+<ol>
+<li>构造训练集；</li>
+<li>学习，得到输入输出间的关系；</li>
+<li>预测，通过学习得到的关系预测输出。</li>
+</ol>
+<h2 id="线性回归"><a href="#线性回归" class="headerlink" title="线性回归"></a>线性回归</h2><p>假设要使用回归模型预测一个人每周花在微信上的时间和微信好友数量之间的关系，可以用如下的表达式表示：</p>
+<p>$$ y=ax+b+e $$</p>
+<p>其中，<em>y</em>是你每周需要花费在微信上的时间，<em>x</em>是你的微信好友数量，<em>e</em>是误差。对于误差<em>e</em>，它不是一个定值，有一对<em>y</em>和<em>x</em>，就有一个<em>e</em>，<em>e</em>的值满足正态分布。</p>
+<p>假设有数据集：</p>
+<table>
+<thead>
+<tr>
+<th>好友数量</th>
+<th>花费的时间</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>50</td>
+<td>55</td>
+</tr>
+<tr>
+<td>53</td>
+<td>56</td>
+</tr>
+<tr>
+<td>80</td>
+<td>79</td>
+</tr>
+<tr>
+<td>90</td>
+<td>88</td>
+</tr>
+<tr>
+<td>63</td>
+<td>58</td>
+</tr>
+<tr>
+<td>89</td>
+<td>93</td>
+</tr>
+<tr>
+<td>120</td>
+<td>90</td>
+</tr>
+<tr>
+<td>155</td>
+<td>120</td>
+</tr>
+</tbody>
+</table>
+<p>将数据集用散点图表示：</p>
+<p><img src="http://osuro1ft2.bkt.clouddn.com//17-7-14/7010575.jpg" alt=""></p>
+<p>我们假定<em>x</em>和<em>y</em>之间的关系确实是线性的，那么可以尝试在散点图上画一条直线：</p>
+<p><img src="http://osuro1ft2.bkt.clouddn.com//17-7-14/92659690.jpg" alt=""></p>
+<p>可以看出，我们能画出很多条直线。接下来就是要从存在的直线中确定一条最佳的直线来拟合数据。</p>
+<p>如果存在一条最佳拟合的直线，那么所有的样本数据到这条直线的距离应该是最小的。对于线性回归来说，“最佳”指的就是距离最小化。因此，将参数求解问题转换为求最小误差问题。常见的获得最佳拟合线的方法有最小二乘法、梯度下降算法等。</p>
+<h2 id="使用最小二乘法拟合"><a href="#使用最小二乘法拟合" class="headerlink" title="使用最小二乘法拟合"></a>使用最小二乘法拟合</h2><p>对于上面的样本集，我们尝试用$ y=ax+b+e $去进行拟合，那么可以得到：</p>
+<p>$$ \mid e \mid = \mid ax + b - y \mid $$</p>
+<p>误差大小其实就是猜想的$ax + b$的值和观测到的<em>y</em>值之间的差值。把所有的$\mid e \mid$都求和，构造一个函数：</p>
+<p>$$Q = \sum_{i=1}^n (ax_i + b - y_i)^2$$</p>
+<p>当$Q$最小的时候，即可得到最佳拟合的直线。</p>
+<p>可以求导得到$a$和$b$，也可以直接用下面的公式求得：（省略数学推导过程）</p>
+<p>$$<br>a=\frac<br>{<br>    \frac<br>    {\sum_{i = 1}^n y_i  \sum_{i = 1}^n x_i}<br>    {n} -<br>    \sum_{i = 1}^n x_i y_i<br>    }<br>{<br>    \frac<br>    {\sum_{i = 1}^n x_i * \sum_{i = 1}^n x_i}<br>    {n} -<br>    \sum_{i = 1}^n x_i^2<br>    }<br>$$</p>
+<p>$$<br>b=\frac {\sum_{i = 1}^n y_i - a  \sum_{i = 1}^n x_i}{n}<br>$$</p>
+<p>得到$a$和$b$之后，可以用R平方来评估拟合程度：</p>
+<p>$$<br>R^2=1-\frac<br>{\sum_{i=1}^n (y_i - \hat{y_i})^2}<br>{\sum_{i=1}^n (y_i - \bar{y})^2}<br>$$</p>
+<p>R平方可以解释为数据集中能够被模型所解释的方差占数据总方差的比重，R平方值越大，说明模型对数据的拟合程度越高。</p>
+<h2 id="编码实现"><a href="#编码实现" class="headerlink" title="编码实现"></a>编码实现</h2><p>首先构造一个类来存放记录：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DataNode</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">double</span> x;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">double</span> y;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getX</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> x;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getY</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> y;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setX</span><span class="params">(<span class="keyword">double</span> x)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.x = x;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setY</span><span class="params">(<span class="keyword">double</span> y)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.y = y;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getXY</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.x * <span class="keyword">this</span>.y;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后构造<code>MyLinearRegression</code>类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyLinearRegression</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> List&lt;DataNode&gt; list;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">double</span> alpha;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">double</span> beta;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">double</span> r;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyLinearRegression</span><span class="params">(String path)</span> <span class="keyword">throws</span> IOException</span>&#123;</div><div class="line">        <span class="keyword">this</span>.list = <span class="keyword">new</span> ArrayList&lt;DataNode&gt;();</div><div class="line"></div><div class="line">        init(path);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getAlpha</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> alpha;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getBeta</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> beta;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getR</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.r;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(String path)</span> <span class="keyword">throws</span> IOException</span>&#123;</div><div class="line">        BufferedReader reader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> FileReader(<span class="keyword">new</span> File(path)));</div><div class="line">        String line = <span class="string">""</span>;</div><div class="line"></div><div class="line">        <span class="keyword">while</span> ((line = reader.readLine()) != <span class="keyword">null</span>)&#123;</div><div class="line">            String str[] = line.split(<span class="string">","</span>);</div><div class="line">            DataNode dataNode = <span class="keyword">new</span> DataNode();</div><div class="line">            dataNode.setX(Double.parseDouble(str[<span class="number">0</span>]));</div><div class="line">            dataNode.setY(Double.parseDouble(str[<span class="number">1</span>]));</div><div class="line">            <span class="keyword">this</span>.list.add(dataNode);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        reader.close();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最后要根据读取到的数据去求<code>alpha</code>，<code>beta</code>和<code>r</code>的值。可以直接利用上面的公式：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getAB</span><span class="params">()</span></span>&#123;</div><div class="line">    <span class="keyword">int</span> n = list.size();</div><div class="line">    <span class="keyword">double</span> sumX = <span class="number">0</span>;</div><div class="line">    <span class="keyword">double</span> sumY = <span class="number">0</span>;</div><div class="line">    <span class="keyword">double</span> sumXY = <span class="number">0</span>;</div><div class="line">    <span class="keyword">double</span> sumX2 = <span class="number">0</span>;</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (DataNode dataNode : list)&#123;</div><div class="line">        sumX += dataNode.getX();</div><div class="line">        sumY += dataNode.getY();</div><div class="line">        sumXY += dataNode.getXY();</div><div class="line">        sumX2 += Math.pow(dataNode.getX(), <span class="number">2</span>);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">this</span>.alpha = (((sumY * sumX) / n) - sumXY) / (((sumX * sumX) / n) - sumX2);</div><div class="line">    <span class="keyword">this</span>.beta = (sumY - <span class="keyword">this</span>.alpha * sumX) / n;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getR2</span><span class="params">()</span></span>&#123;</div><div class="line">    <span class="keyword">double</span> num = <span class="number">0</span>;</div><div class="line">    <span class="keyword">double</span> den = <span class="number">0</span>;</div><div class="line">    <span class="keyword">double</span> sumY = <span class="number">0</span>;</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (DataNode dataNode : list)&#123;</div><div class="line">        sumY += dataNode.getY();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">double</span> avgY = sumY / list.size();</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (DataNode dataNode : list)&#123;</div><div class="line">        num += Math.pow((dataNode.getY() - (dataNode.getX() * <span class="keyword">this</span>.alpha + beta)), <span class="number">2</span>);</div><div class="line">        den += Math.pow((dataNode.getY() - avgY), <span class="number">2</span>);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">this</span>.r = <span class="number">1</span> - (num / den);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>使用上述数据集拟合：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> <span class="keyword">throws</span> IOException</span>&#123;</div><div class="line">        String path = <span class="string">"test.txt"</span>;</div><div class="line">        MyLinearRegression linearRegression = <span class="keyword">new</span> MyLinearRegression(path);</div><div class="line">        linearRegression.getAB();</div><div class="line">        linearRegression.getR2();</div><div class="line">        System.out.println(<span class="string">"alpha = "</span> + linearRegression.getAlpha());</div><div class="line">        System.out.println(<span class="string">"beta = "</span> + linearRegression.getBeta());</div><div class="line">        System.out.println(<span class="string">"R2 = "</span> + linearRegression.getR());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>得到结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">alpha = 0.6058710840658103</div><div class="line">beta = 26.861280144241604</div><div class="line">R2 = 0.9001321912140731</div></pre></td></tr></table></figure>
+<p>所以，拟合该数据集的直线为$y=0.61x+26.86$。</p>
+<h2 id="过拟合和欠拟合"><a href="#过拟合和欠拟合" class="headerlink" title="过拟合和欠拟合"></a>过拟合和欠拟合</h2><h3 id="过拟合"><a href="#过拟合" class="headerlink" title="过拟合"></a>过拟合</h3><p>过拟合，即在拟合过程中“做过头”。在拟合过程中，可能为了迎合所有的样本甚至是噪声点，使得模型的描述过于复杂，或者失去泛化能力。造成过拟合的原因可能有：</p>
+<ol>
+<li>训练样本过少；</li>
+<li>迎合了所有的样本甚至是噪声点。</li>
+</ol>
+<h3 id="欠拟合"><a href="#欠拟合" class="headerlink" title="欠拟合"></a>欠拟合</h3><p>欠拟合与过拟合相反，由于操作不当导致模型产生的误差$e$分布过于分散或者太大。欠拟合会因为误差太大导致模型没有泛化能力而失去指导意义。造成欠拟合的方法可能有：</p>
+<ol>
+<li>参数过少；</li>
+<li>拟合方法不当。</li>
+</ol>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://item.jd.com/11932929.html" target="_blank" rel="external">白话大数据与机器学习</a></p>
+<p><a href="https://item.jd.com/11617070.html?dist=jd" target="_blank" rel="external">数据科学实战</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>如果你觉得这篇文章对你有用，可以请作者喝杯咖啡</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/images/wechat.png" alt="voidAlex WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/images/alipay.png" alt="voidAlex Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/算法/" rel="tag"># 算法</a>
+          
+            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/20/Java爬虫：爬取妹子图/" rel="next" title="Java爬虫：上车吧！爬取妹子图">
+                <i class="fa fa-chevron-left"></i> Java爬虫：上车吧！爬取妹子图
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/18/数据归一化的方法/" rel="prev" title="数据归一化的方法">
+                数据归一化的方法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<div class="addthis_inline_share_toolbox">
+  <script type = "text/javascript" src = "//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-59621fa45a3364d3" async = "async" ></script>
+</div>
+
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="voidAlex" />
+          <p class="site-author-name" itemprop="name">voidAlex</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/voidAlex" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/wangld1994" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#回归问题"><span class="nav-number">1.</span> <span class="nav-text">回归问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线性回归"><span class="nav-number">2.</span> <span class="nav-text">线性回归</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用最小二乘法拟合"><span class="nav-number">3.</span> <span class="nav-text">使用最小二乘法拟合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编码实现"><span class="nav-number">4.</span> <span class="nav-text">编码实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#过拟合和欠拟合"><span class="nav-number">5.</span> <span class="nav-text">过拟合和欠拟合</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#过拟合"><span class="nav-number">5.1.</span> <span class="nav-text">过拟合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#欠拟合"><span class="nav-number">5.2.</span> <span class="nav-text">欠拟合</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">6.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">voidAlex</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+<div class="busuanzi-count">
+
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">访客数：<span class="busuanzi-value" id="busuanzi_value_site_uv"></span>人</span>
+  
+
+  
+    <span class="site-pv">访问量：<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>次</span>
+  
+  
+</div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'voidalex';
+      var disqus_identifier = '2017/07/23/算法笔记：一元线性回归及Java实现/';
+
+      var disqus_title = "算法笔记：一元线性回归及Java实现";
+
+
+      function run_disqus_script(disqus_script) {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.0"></script>
+
+
+
+  
+
+</body>
+</html>

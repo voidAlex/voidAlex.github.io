@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>一种在服务器上部署Hexo博客的思路 | voidAlex的记事本 | 长路漫漫，唯剑作伴</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="配置,杂记">
+    <meta name="description" content="前言笔者在过年期间买了域名和VPS，打算迁移博客到VPS上（GitHub Page访问速度实在是……你懂得）。由于平时使用的主力语言是Java，所以找了两个开源的Java博客系统Solo和Tale，试用了之后发现都有不满意的地方，比如说：  主题少 有广告（虽然是开源的能理解，但是强迫症接受不了……） 不支持MathJax渲染（虽然自己加上了，但还是有问题，强迫症同样无法接受……） ……  思来想">
+<meta name="keywords" content="配置,杂记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一种在服务器上部署Hexo博客的思路">
+<meta property="og:url" content="https://voidalex.one/2018/02/19/一种在服务器上部署Hexo博客的思路/index.html">
+<meta property="og:site_name" content="voidAlex的记事本">
+<meta property="og:description" content="前言笔者在过年期间买了域名和VPS，打算迁移博客到VPS上（GitHub Page访问速度实在是……你懂得）。由于平时使用的主力语言是Java，所以找了两个开源的Java博客系统Solo和Tale，试用了之后发现都有不满意的地方，比如说：  主题少 有广告（虽然是开源的能理解，但是强迫症接受不了……） 不支持MathJax渲染（虽然自己加上了，但还是有问题，强迫症同样无法接受……） ……  思来想">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://voidalex-blog.oss-cn-beijing.aliyuncs.com/18-2-21/93762063.jpg">
+<meta property="og:image" content="https://voidalex-blog.oss-cn-beijing.aliyuncs.com/18-2-21/98662173.jpg">
+<meta property="og:image" content="https://voidalex-blog.oss-cn-beijing.aliyuncs.com/18-2-21/65761270.jpg">
+<meta property="og:image" content="https://voidalex-blog.oss-cn-beijing.aliyuncs.com/18-2-21/5139675.jpg">
+<meta property="og:image" content="https://voidalex-blog.oss-cn-beijing.aliyuncs.com/18-2-21/8761275.jpg">
+<meta property="og:image" content="https://voidalex-blog.oss-cn-beijing.aliyuncs.com/18-2-21/27412.jpg">
+<meta property="og:image" content="https://voidalex-blog.oss-cn-beijing.aliyuncs.com/18-2-21/52277650.jpg">
+<meta property="og:image" content="https://voidalex-blog.oss-cn-beijing.aliyuncs.com/18-2-21/51560676.jpg">
+<meta property="og:updated_time" content="2018-02-21T09:31:01.149Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一种在服务器上部署Hexo博客的思路">
+<meta name="twitter:description" content="前言笔者在过年期间买了域名和VPS，打算迁移博客到VPS上（GitHub Page访问速度实在是……你懂得）。由于平时使用的主力语言是Java，所以找了两个开源的Java博客系统Solo和Tale，试用了之后发现都有不满意的地方，比如说：  主题少 有广告（虽然是开源的能理解，但是强迫症接受不了……） 不支持MathJax渲染（虽然自己加上了，但还是有问题，强迫症同样无法接受……） ……  思来想">
+<meta name="twitter:image" content="https://voidalex-blog.oss-cn-beijing.aliyuncs.com/18-2-21/93762063.jpg">
+    
+        <link rel="alternate" type="application/atom+xml" title="voidAlex的记事本" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">voidAlex</h5>
+          <a href="mailto:wangld1994@gmail.com" title="wangld1994@gmail.com" class="mail">wangld1994@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签云
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/voidAlex" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                GitHub
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="http://www.weibo.com/wangld1994" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                微博
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-info"></i>
+                关于
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">一种在服务器上部署Hexo博客的思路</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">一种在服务器上部署Hexo博客的思路</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-02-19T05:01:00.000Z" itemprop="datePublished" class="page-time">
+  2018-02-19
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#（题外话）域名和VPS"><span class="post-toc-number">2.</span> <span class="post-toc-text">（题外话）域名和VPS</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#服务器的环境配置"><span class="post-toc-number">3.</span> <span class="post-toc-text">服务器的环境配置</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#安装Node-js"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">安装Node.js</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#安装Nginx并配置反向代理"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">安装Nginx并配置反向代理</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#配置DNS解析"><span class="post-toc-number">4.</span> <span class="post-toc-text">配置DNS解析</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#本地配置Hexo"><span class="post-toc-number">5.</span> <span class="post-toc-text">本地配置Hexo</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#安装插件"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">安装插件</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#配置hexo-admin"><span class="post-toc-number">5.2.</span> <span class="post-toc-text">配置hexo-admin</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#将Hexo博客迁移至服务器"><span class="post-toc-number">6.</span> <span class="post-toc-text">将Hexo博客迁移至服务器</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#善后工作"><span class="post-toc-number">7.</span> <span class="post-toc-text">善后工作</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#后台运行hexo"><span class="post-toc-number">7.1.</span> <span class="post-toc-text">后台运行hexo</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#优化解析速度"><span class="post-toc-number">7.2.</span> <span class="post-toc-text">优化解析速度</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#与GitHub-Page同步"><span class="post-toc-number">7.3.</span> <span class="post-toc-text">与GitHub Page同步</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#安利一下"><span class="post-toc-number">8.</span> <span class="post-toc-text">安利一下</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-一种在服务器上部署Hexo博客的思路"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">一种在服务器上部署Hexo博客的思路</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-02-19 13:01:00" datetime="2018-02-19T05:01:00.000Z"  itemprop="datePublished">2018-02-19</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>笔者在过年期间买了域名和VPS，打算迁移博客到VPS上（GitHub Page访问速度实在是……你懂得）。由于平时使用的主力语言是Java，所以找了两个开源的Java博客系统<a href="https://github.com/b3log/solo" target="_blank" rel="noopener">Solo</a>和<a href="https://github.com/otale/tale" target="_blank" rel="noopener">Tale</a>，试用了之后发现都有不满意的地方，比如说：</p>
+<ul>
+<li>主题少</li>
+<li>有广告（虽然是开源的能理解，但是强迫症接受不了……）</li>
+<li>不支持MathJax渲染（虽然自己加上了，但还是有问题，强迫症同样无法接受……）</li>
+<li>……</li>
+</ul>
+<p>思来想去还是hexo好，遂决定把hexo部署在服务器上。搜了一下发现大家都是把VPS当做Git服务器在用，然后用Nginx去解析静态资源。这种方式本质上和托管在GitHub上没什么区别，无非就是解析速度快点而已。这样做除了加快解析速度外，并没有任何好处。写一篇博文还是要经历<code>创建文件--写博文--预览--生成静态资源--使用Git同步</code>这么一个过程。而且在更换电脑后必须配置<code>Node.js</code>、<code>Git</code>、<code>Hexo</code>等一大堆东西之后才能写，等于花VPS的钱，只起到了一个加速效果。</p>
+<p>好在<code>Hexo</code>还有<code>hexo-server</code>和<code>hexo-admin</code>这样的插件。之前并没有觉得<code>hexo-admin</code>这样的插件有什么用，但是在VPS上，它的价值体现出来了。于是，一个部署的思路诞生了：</p>
+<ul>
+<li>使用<code>hexo-server</code>作为hexo的服务器</li>
+<li>使用<code>hexo-admin</code>作为hexo的管理后台</li>
+<li>使用<code>Nginx</code>作为反向代理服务器</li>
+<li>使用<code>Git</code>与GitHub仓库同步（可选）</li>
+</ul>
+<p>这样的话，等于给Hexo博客多了一个后台。成功部署后在本地只需要一个浏览器就可以美滋滋的写博客了~</p>
+<p>阅读前方内容需要一定的基础，假设你已经在GitHub Page上成功的部署了你的博客，并且有一定的Linux基础知识。如果你还没有使用过Hexo，那么可以先看看<a href="https://hexo.io/zh-cn/docs/index.html" target="_blank" rel="noopener">官方文档</a>和<a href="https://zhuanlan.zhihu.com/p/25471760" target="_blank" rel="noopener">这篇教程</a>。</p>
+<h2 id="（题外话）域名和VPS"><a href="#（题外话）域名和VPS" class="headerlink" title="（题外话）域名和VPS"></a>（题外话）域名和VPS</h2><p>在国内购买服务器和域名需要备案。为了避免麻烦笔者选择了<a href="https://godaddy.com/" target="_blank" rel="noopener">狗爹</a>和<a href="https://www.vultr.com/?ref=7336080" target="_blank" rel="noopener">vultr</a>。VPS套餐选择的是每个月5刀的套餐，配置只有1核CUP和1GB内存（编译Node.js用了40分钟），但是已经足够。</p>
+<h2 id="服务器的环境配置"><a href="#服务器的环境配置" class="headerlink" title="服务器的环境配置"></a>服务器的环境配置</h2><p>服务器配置的所有操作均为在Ubuntu 16.04下的操作。</p>
+<h3 id="安装Node-js"><a href="#安装Node-js" class="headerlink" title="安装Node.js"></a>安装Node.js</h3><p>Hexo是在Node.js上构建的博客系统，通过Node.js将<code>.md</code>文件渲染为<code>.html</code>文件。所以，安装Node.js必不可少。</p>
+<p>安装Node.js的方法很多，笔者选择下载源码编译安装。注意，编译安装的时间长短视你的服务器配置而定，笔者的小水管上编译了40多分钟才玩。</p>
+<p>首先安装<code>gcc</code>、<code>g++</code>、<code>make</code>、<code>python</code>等编译解释环境：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo apt update #老版本Ubuntu请使用apt-get</div><div class="line">sudo apt install gcc g++ make python</div></pre></td></tr></table></figure></p>
+<p>获取Node.js的源码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">wget http://nodejs.org/dist/latest-v8.x/node-v8.9.4.tar.gz</div><div class="line">tar zxvf node-v8.9.4.tar.gz</div></pre></td></tr></table></figure></p>
+<p>开始安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cd node-v8.9.4</div><div class="line">./configure	#如果gcc、make等依赖未安装会报错</div><div class="line">make install	#安装时间较长</div></pre></td></tr></table></figure></p>
+<p>安装完成之后验证：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">node -v</div><div class="line">v8.9.4</div></pre></td></tr></table></figure></p>
+<h3 id="安装Nginx并配置反向代理"><a href="#安装Nginx并配置反向代理" class="headerlink" title="安装Nginx并配置反向代理"></a>安装Nginx并配置反向代理</h3><p>Nginx在Ubuntu下的安装较为简单，直接通过apt源即可安装：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo apt update</div><div class="line">sudo apt install nginx</div></pre></td></tr></table></figure>
+<p>启动Nginx：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service nginx start</div></pre></td></tr></table></figure></p>
+<p>在浏览器中输入你的服务器ip进行验证（不用加端口号），如果能看见Nginx的欢迎页面说明安装成功。</p>
+<p>编辑<code>/etc/nginx/nginx.conf</code>，配置反向代理：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">	listen       80; #监听端口，默认为http请求的80端口</div><div class="line">    server_name  voidalex.one;	#你的域名</div><div class="line">    </div><div class="line">    location / &#123;</div><div class="line">        proxy_pass http://localhost:4000/;	#代理转发，你的hexo服务器的地址</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>保存完毕，执行<code>service nginx reload</code>重启Nginx服务器。</p>
+<h2 id="配置DNS解析"><a href="#配置DNS解析" class="headerlink" title="配置DNS解析"></a>配置DNS解析</h2><p>在你购买的域名服务商的控制面板中，配置DNS解析，IP为你的服务器公网IP（不加端口）。设置完毕稍等一会（DNS服务器需要刷新缓存），访问你的域名即可看到Nginx的欢迎页面。</p>
+<h2 id="本地配置Hexo"><a href="#本地配置Hexo" class="headerlink" title="本地配置Hexo"></a>本地配置Hexo</h2><h3 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h3><p>在服务器运行Hexo需要依赖于<code>hexo-server</code>和<code>hexo-admin</code>。如果你在本地已经安装这两个插件，请跳过这一步。（当然你也可以直接copy你的hexo博客目录到服务器上安装这两个插件，不过在本地先安装方便调试）</p>
+<p>cd到你的博客根目录下，执行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">npm install hexo-server@0.3.1 --save</div><div class="line">npm install hexo-admin@2.3.0 --save</div></pre></td></tr></table></figure></p>
+<p>安装完毕后，执行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexo s</div></pre></td></tr></table></figure></p>
+<p>打开浏览器，访问<a href="http://localhost:4000" target="_blank" rel="noopener">http://localhost:4000</a> 即可预览博客，访问<a href="http://localhost:4000/admin" target="_blank" rel="noopener">http://localhost:4000/admin</a> 即可进入<code>hexo-admin</code>后台管理界面。</p>
+<h3 id="配置hexo-admin"><a href="#配置hexo-admin" class="headerlink" title="配置hexo-admin"></a>配置hexo-admin</h3><p>hexo-admin默认没有开启密码保护，需要自己手动开启。</p>
+<p>访问<a href="http://localhost:4000/admin" target="_blank" rel="noopener">http://localhost:4000/admin</a> 点击<code>Settings--Setup authentification here</code>进行密码设置：<br><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://voidalex-blog.oss-cn-beijing.aliyuncs.com/18-2-21/93762063.jpg" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure></p>
+<p>输入用户名、密码后，将生成的代码复制：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://voidalex-blog.oss-cn-beijing.aliyuncs.com/18-2-21/98662173.jpg" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>然后打开博客根目录下的<code>_config.yml</code>，将复制的代码粘贴到末尾。</p>
+<p>重新启动hexo服务器，访问<a href="http://localhost:4000/admin" target="_blank" rel="noopener">http://localhost:4000/admin</a> 如果出现登录界面，则配置成功。</p>
+<h2 id="将Hexo博客迁移至服务器"><a href="#将Hexo博客迁移至服务器" class="headerlink" title="将Hexo博客迁移至服务器"></a>将Hexo博客迁移至服务器</h2><p>很简单，将你的整个博客目录打包，然后上传到服务器，然后解包。你在本地使用npm安装的hexo插件都在博客根目录下的<code>node_modules</code>目录下。如果你没有动这个目录，那么在服务器上解包之后就能直接用了。解包推荐使用<code>unzip</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">unzip blog.zip</div><div class="line">cd blog</div><div class="line">hexo s</div></pre></td></tr></table></figure>
+<p>如果一切正常，访问你的域名就可以看到博客了，访问域名/admin就能进入到后台界面。</p>
+<blockquote>
+<p>Tips：如果执行hexo相关命令报错的话，按照博客根目录下<code>package.json</code>中列出的插件名和版本重新按照一遍就好了。如：<code>npm install hexo@3.5.0 --save</code></p>
+</blockquote>
+<h2 id="善后工作"><a href="#善后工作" class="headerlink" title="善后工作"></a>善后工作</h2><p>实际上，到上一步已经成功的把Hexo部署在服务器上了。但是为了获得更好的体验还是需要再进行一些配置。</p>
+<h3 id="后台运行hexo"><a href="#后台运行hexo" class="headerlink" title="后台运行hexo"></a>后台运行hexo</h3><p>直接使用<code>hexo s</code>启动服务器，Ctrl+C或者shell关掉就结束进程了。可以使用<code>nohup</code>来后台运行hexo。在博客根目录下，执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nohup hexo s &amp;</div></pre></td></tr></table></figure>
+<p>这样hexo就会运行在后台，输出的日志会被记录在<code>nohup.out</code>中。</p>
+<h3 id="优化解析速度"><a href="#优化解析速度" class="headerlink" title="优化解析速度"></a>优化解析速度</h3><p>部署好了，但是加载速度仍然很慢。原因是每次访问的时候hexo都会动态的去加载<code>.md</code>文件，然后由Node.js渲染成html，再展示出来。看到hexo的官方文档中提了这么一句：<br><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://voidalex-blog.oss-cn-beijing.aliyuncs.com/18-2-21/65761270.jpg" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure><br>重启服务器之后，果然加载快了很多很多。</p>
+<p>然而，这样启动服务器，你在后台编辑过的文章都不会被加载出来。需要你手动的执行<code>hexo g</code>命令，才能加载出来。</p>
+<p>强迫症是忍受不了这样的操作的，好在<code>hexo-admin</code>中提供了这样一个功能：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://voidalex-blog.oss-cn-beijing.aliyuncs.com/18-2-21/5139675.jpg" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>点击按钮就能执行你的部署脚本。在博客根目录下的<code>_config.yml</code>中添加配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">admin:</div><div class="line">	deployCommand: &apos;./hexo-deploy.sh&apos;</div></pre></td></tr></table></figure></p>
+<p>然后在博客根目录下创建<code>hexo-deploy.sh</code>，并编辑：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/env sh</div><div class="line">hexo g</div></pre></td></tr></table></figure></p>
+<p>给<code>hexo-deploy.sh</code>授予权限：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">chmod a+x hexo-deploy.sh</div></pre></td></tr></table></figure></p>
+<p>重启服务器，编辑博文后点击Deploy按钮就可以把文章渲染成html页面来访问了。</p>
+<h3 id="与GitHub-Page同步"><a href="#与GitHub-Page同步" class="headerlink" title="与GitHub Page同步"></a>与GitHub Page同步</h3><p>如果想在服务器上和原仓库同步的话，只需要配置Git，然后修改部署脚本就行了。Git的安装和配置不在赘述，要注意的是服务器上安装的Git不是用来配置Git服务器的，而是当做一个用户来提交代码的。配置完记得在你的GitHub中添加秘钥。</p>
+<p>配置完之后，只需要修改<code>hexo-deploy.sh</code>就可以了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/env sh</div><div class="line">hexo g -d</div></pre></td></tr></table></figure></p>
+<p>然后重启服务器，以后每次点击deploy按钮时都会把渲染的html页面提交到GitHub仓库里。输出信息如下图：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://voidalex-blog.oss-cn-beijing.aliyuncs.com/18-2-21/8761275.jpg" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://voidalex-blog.oss-cn-beijing.aliyuncs.com/18-2-21/27412.jpg" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>如果看到这些信息，说明配置没有问题，代码已经提交成功了。</p>
+<p>验证一下：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://voidalex-blog.oss-cn-beijing.aliyuncs.com/18-2-21/52277650.jpg" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://voidalex-blog.oss-cn-beijing.aliyuncs.com/18-2-21/51560676.jpg" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<h2 id="安利一下"><a href="#安利一下" class="headerlink" title="安利一下"></a>安利一下</h2><p>安利几个好东西吧。</p>
+<p><a href="https://sg.godaddy.com/zh/" target="_blank" rel="noopener">狗爹</a>，全球最大的域名服务商</p>
+<p><a href="https://www.vultr.com/?ref=7336080" target="_blank" rel="noopener">vultr</a>，美帝的VPS提供商，按分钟计费。推荐每个月5刀的套餐，硅谷节点（千万不要选新加坡和日本节点，很容易被墙而且速度奇慢）</p>
+<p><a href="https://github.com/Moeditor/Moeditor" target="_blank" rel="noopener">Moeditor</a>，十分简洁舒服的Markdown编辑器</p>
+<p><a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank" rel="noopener">indigo</a>，很好看的一个Hexo主题</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-02-21T09:31:01.149Z" itemprop="dateUpdated">2018-02-21 17:31:01</time>
+</span><br>
+
+
+        
+        原文链接：<a href="/2018/02/19/一种在服务器上部署Hexo博客的思路/" target="_blank" rel="external">https://voidalex.one/2018/02/19/一种在服务器上部署Hexo博客的思路/</a><br>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/deed.zh">知识共享 署名-非商业性 4.0 国际协议</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://voidalex.one">
+            <img src="/img/avatar.png" alt="voidAlex">
+            voidAlex
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/杂记/">杂记</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/配置/">配置</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://voidalex.one/2018/02/19/一种在服务器上部署Hexo博客的思路/&title=《一种在服务器上部署Hexo博客的思路》 — voidAlex的记事本&pic=https://voidalex.one/img/avatar.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://voidalex.one/2018/02/19/一种在服务器上部署Hexo博客的思路/&title=《一种在服务器上部署Hexo博客的思路》 — voidAlex的记事本&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://voidalex.one/2018/02/19/一种在服务器上部署Hexo博客的思路/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《一种在服务器上部署Hexo博客的思路》 — voidAlex的记事本&url=https://voidalex.one/2018/02/19/一种在服务器上部署Hexo博客的思路/&via=https://voidalex.one" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://voidalex.one/2018/02/19/一种在服务器上部署Hexo博客的思路/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/11/09/理解Spring中的依赖注入/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">理解Spring中的依赖注入</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+<section class="comments" id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+    var disqus_shortname = 'true';
+    lazyScripts.push('//' + disqus_shortname + '.disqus.com/embed.js')
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢客官~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/deed.zh">知识共享 署名-非商业性使用 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>voidAlex &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://voidalex.one/2018/02/19/一种在服务器上部署Hexo博客的思路/&title=《一种在服务器上部署Hexo博客的思路》 — voidAlex的记事本&pic=https://voidalex.one/img/avatar.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://voidalex.one/2018/02/19/一种在服务器上部署Hexo博客的思路/&title=《一种在服务器上部署Hexo博客的思路》 — voidAlex的记事本&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://voidalex.one/2018/02/19/一种在服务器上部署Hexo博客的思路/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《一种在服务器上部署Hexo博客的思路》 — voidAlex的记事本&url=https://voidalex.one/2018/02/19/一种在服务器上部署Hexo博客的思路/&via=https://voidalex.one" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://voidalex.one/2018/02/19/一种在服务器上部署Hexo博客的思路/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACtElEQVR42u3a0W7CMAwFUP7/p5m0V0R7bceMSadPaJQ2J5Ma98aPR3w8f493f389rs95vebr5+vzDx94eHh4raFfDzS52TM4rgHv7pVMwbtf4eHh4e3xrheD5AFdPb+3/ORjwMPDw/sGXlIWFx7Z8TLQm2I8PDy8/8LbWGy+aGHAw8PDK4YRSXTbG0QSSaxnLXh4eHi1yrYQE3zD58X9PTw8PLzBrnqvLeB6EGe3zW5+hYeHh7fAy0OHvBQeRa6tKOTmXnh4eHhHefnWVF7yJoOYT1A00Xh4eHgLvN5LfjL0fMqqpXN5EcLDw8Nb5k02ovJMNQ8meptkN2EEHh4e3oA3Dxd6rQbVdoTmgoSHh4e3wEuQ1cBi3mg1OR8PDw/vk7y85M3jhl64UO2kugmm8fDw8I7yeq1Uedmdt2FV492o6MfDw8Nb4FXL4lMhRe/bPMLAw8PD+wwvf8nvBbL5kW93Ra0PeHh4eGu8Hqn34J43YyUKPDw8vA1eHonmj+zqNfNlplrK4+Hh4W3zTj3u85K3GitUkXh4eHgbvElpO9mUqi5FvcgDDw8Pb5t39nGfBxmTqUl+i4eHh7fBq0arkyK7GsVGq9n1mXh4eHhHeZMNqkLDaL7NHxfc0QsAHh4e3kd4edjaa9I61RYQLR54eHh4C7xqAZ1ctHpmNZZNroOHh4e3x6sW06O9tbhMn8QZzfcAPDw8vNpdyoHCpDlg0jow/1fh4eHhzXnP4lF9rCeFbz5B5YUEDw8Pb4E3qUUTcDW0TQLifCLw8PDw9njzDaqkRSBZMHoF900hjoeHh7fGyxeD/NL5WjSfSjw8PLxv5lWDg/wuvSaGqLMMDw8P7494SeFbnaC9wAIPDw9vm3fqcTwvsufbacdiXDw8PLzOm37zltdLSD7cfHKbO3t4eHh4Nd4PHBK8wUXFmOgAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '基佬快回来~';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '一起来van♂游戏吧';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

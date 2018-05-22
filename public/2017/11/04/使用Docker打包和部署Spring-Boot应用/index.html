@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>使用Docker打包和部署Spring Boot应用 | voidAlex的记事本 | 长路漫漫，唯剑作伴</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Docker,Spring Boot">
+    <meta name="description" content="在Ubuntu 16.04下使用Docker部署Spring Boot应用。这是voidAlex原创的第十一篇博文。">
+<meta name="keywords" content="Docker,Spring Boot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Docker打包和部署Spring Boot应用">
+<meta property="og:url" content="https://voidalex.one/2017/11/04/使用Docker打包和部署Spring-Boot应用/index.html">
+<meta property="og:site_name" content="voidAlex的记事本">
+<meta property="og:description" content="在Ubuntu 16.04下使用Docker部署Spring Boot应用。这是voidAlex原创的第十一篇博文。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://osuro1ft2.bkt.clouddn.com//17-11-4/82954513.jpg">
+<meta property="og:image" content="http://osuro1ft2.bkt.clouddn.com//17-11-4/18362650.jpg">
+<meta property="og:updated_time" content="2017-11-10T09:29:52.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用Docker打包和部署Spring Boot应用">
+<meta name="twitter:description" content="在Ubuntu 16.04下使用Docker部署Spring Boot应用。这是voidAlex原创的第十一篇博文。">
+<meta name="twitter:image" content="http://osuro1ft2.bkt.clouddn.com//17-11-4/82954513.jpg">
+    
+        <link rel="alternate" type="application/atom+xml" title="voidAlex的记事本" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">voidAlex</h5>
+          <a href="mailto:wangld1994@gmail.com" title="wangld1994@gmail.com" class="mail">wangld1994@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签云
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/voidAlex" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                GitHub
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="http://www.weibo.com/wangld1994" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                微博
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-info"></i>
+                关于
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">使用Docker打包和部署Spring Boot应用</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">使用Docker打包和部署Spring Boot应用</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-11-04T03:46:13.000Z" itemprop="datePublished" class="page-time">
+  2017-11-04
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Docker"><span class="post-toc-number">1.</span> <span class="post-toc-text">Docker</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Docker简介"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">Docker简介</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#与虚拟机技术的比较"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">与虚拟机技术的比较</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Docker的优势"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">Docker的优势</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#准备工作"><span class="post-toc-number">2.</span> <span class="post-toc-text">准备工作</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#安装和配置Docker"><span class="post-toc-number">3.</span> <span class="post-toc-text">安装和配置Docker</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#配置国内安装源"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">配置国内安装源</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#安装Docker-CE"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">安装Docker CE</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#脚本自动安装"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">脚本自动安装</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#启动Docker"><span class="post-toc-number">3.4.</span> <span class="post-toc-text">启动Docker</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#配置Docker远程访问"><span class="post-toc-number">3.5.</span> <span class="post-toc-text">配置Docker远程访问</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Spring-Boot应用配置"><span class="post-toc-number">4.</span> <span class="post-toc-text">Spring Boot应用配置</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#配置Maven依赖"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">配置Maven依赖</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#配置Dockerfile"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">配置Dockerfile</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#打包运行"><span class="post-toc-number">5.</span> <span class="post-toc-text">打包运行</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#编译并构建为Docker镜像"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">编译并构建为Docker镜像</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#运行"><span class="post-toc-number">5.2.</span> <span class="post-toc-text">运行</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-使用Docker打包和部署Spring-Boot应用"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">使用Docker打包和部署Spring Boot应用</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-11-04 11:46:13" datetime="2017-11-04T03:46:13.000Z"  itemprop="datePublished">2017-11-04</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>在Ubuntu 16.04下使用Docker部署Spring Boot应用。<br>这是voidAlex原创的第十一篇博文。<br><a id="more"></a></p>
+</blockquote>
+<h2 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h2><h3 id="Docker简介"><a href="#Docker简介" class="headerlink" title="Docker简介"></a>Docker简介</h3><p>简单的来说，Docker是一种容器，属于操作系统层面的虚拟化技术，基于Linux内核对进程进行封装隔离。Docker从文件系统、网络通信到进程隔离等等，极大的简化了容器的创建与维护，使得Docker比传统的虚拟机技术更加轻便快捷。</p>
+<h3 id="与虚拟机技术的比较"><a href="#与虚拟机技术的比较" class="headerlink" title="与虚拟机技术的比较"></a>与虚拟机技术的比较</h3><p>传统虚拟机技术是虚拟出一套硬件，然后在其上运行一个完整的操作系统，在该系统上再运行所需要应用进程。而容器内的进程则直接运行在宿主的内核上，容器没有自己的内核，没有进行硬件虚拟。因此容器比传统的虚拟机更为轻便。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://osuro1ft2.bkt.clouddn.com//17-11-4/82954513.jpg" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://osuro1ft2.bkt.clouddn.com//17-11-4/18362650.jpg" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<h3 id="Docker的优势"><a href="#Docker的优势" class="headerlink" title="Docker的优势"></a>Docker的优势</h3><ol>
+<li>更高效的利用系统资源</li>
+<li>更快速的启动时间</li>
+<li>一致的运行环境</li>
+<li>持续交付和部署</li>
+<li>更轻松的迁移</li>
+<li>更轻松的维护和扩展</li>
+</ol>
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><p>首先安装Oracle JDK和Maven，在编译Spring Boot应用时会用到。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">sudo apt update</div><div class="line"><span class="comment"># 配置安装源</span></div><div class="line">sudo apt install python-software-properties</div><div class="line">sudo apt install software-properties-common</div><div class="line">sudo add-apt-repository ppa:webupd8team/java</div><div class="line"><span class="comment"># 安装Oracle JDK</span></div><div class="line">sudo apt update</div><div class="line">sudo apt install oracle-java8-installer</div><div class="line"><span class="comment"># 安装Maven</span></div><div class="line">sudo apt install maven</div></pre></td></tr></table></figure>
+<p>查看安装信息：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">java -version</div><div class="line">mvn -v</div></pre></td></tr></table></figure>
+<p>确保JDK版本为8及以上，Maven版本为3及以上。</p>
+<h2 id="安装和配置Docker"><a href="#安装和配置Docker" class="headerlink" title="安装和配置Docker"></a>安装和配置Docker</h2><h3 id="配置国内安装源"><a href="#配置国内安装源" class="headerlink" title="配置国内安装源"></a>配置国内安装源</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">sudo apt-get update</div><div class="line"></div><div class="line">sudo apt-get install apt-transport-https</div><div class="line">sudo apt-get install ca-certificates</div><div class="line">sudo apt-get install curl</div><div class="line">sudo apt-get install software-properties-common</div><div class="line"></div><div class="line">curl -fsSL https://mirrors.ustc.edu.cn/docker-ce/linux/ubuntu/gpg | sudo apt-key add -</div><div class="line"></div><div class="line">sudo add-apt-repository \</div><div class="line">    <span class="string">"deb [arch=amd64] https://mirrors.ustc.edu.cn/docker-ce/linux/ubuntu \</span></div><div class="line">    <span class="variable">$(lsb_release -cs)</span> \</div><div class="line">    stable"</div></pre></td></tr></table></figure>
+<h3 id="安装Docker-CE"><a href="#安装Docker-CE" class="headerlink" title="安装Docker CE"></a>安装Docker CE</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo apt-get update</div><div class="line">sudo apt-get install docker-ce</div></pre></td></tr></table></figure>
+<h3 id="脚本自动安装"><a href="#脚本自动安装" class="headerlink" title="脚本自动安装"></a>脚本自动安装</h3><p>可以使用Docker官方提供的脚本来简化安装流程：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">curl -fsSL get.docker.com -o get-docker.sh</div><div class="line">sudo sh get-docker.sh --mirror Aliyun</div></pre></td></tr></table></figure>
+<h3 id="启动Docker"><a href="#启动Docker" class="headerlink" title="启动Docker"></a>启动Docker</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">sudo systemctl <span class="built_in">enable</span> docker</div><div class="line">sudo systemctl start docker</div><div class="line"><span class="comment"># 建立Docker用户组</span></div><div class="line">sudo groupadd docker</div><div class="line"><span class="comment"># 将当前用户加入到用户组</span></div><div class="line">sudo usermod <span class="_">-a</span>G docker <span class="variable">$USER</span></div></pre></td></tr></table></figure>
+<h3 id="配置Docker远程访问"><a href="#配置Docker远程访问" class="headerlink" title="配置Docker远程访问"></a>配置Docker远程访问</h3><p>Docker默认不会监听任何端口，因此只能在本地使用Docker。如果先在其他机器上操作Docker主机，就要让Docker守护进程监听一个端口。修改Docker服务配置文件，添加一个未被占用的端口后，重启Docker服务：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vi /etc/default/docker</div></pre></td></tr></table></figure>
+<p>添加：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">DOCKER_OPTS=<span class="string">"-H 0.0.0.0:6000"</span></div><div class="line">DOCKER_OPTS=<span class="string">"-H unix:///var/run/docker.sock -H 0.0.0.0:5555"</span></div></pre></td></tr></table></figure>
+<p>重启Docker：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service docker restart</div></pre></td></tr></table></figure>
+<h2 id="Spring-Boot应用配置"><a href="#Spring-Boot应用配置" class="headerlink" title="Spring Boot应用配置"></a>Spring Boot应用配置</h2><h3 id="配置Maven依赖"><a href="#配置Maven依赖" class="headerlink" title="配置Maven依赖"></a>配置Maven依赖</h3><p>在<code>pom.xml</code>中，加入这些内容：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">properties</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">project.build.sourceEncoding</span>&gt;</span>UTF-8<span class="tag">&lt;/<span class="name">project.build.sourceEncoding</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">project.reporting.outputEncoding</span>&gt;</span>UTF-8<span class="tag">&lt;/<span class="name">project.reporting.outputEncoding</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">java.version</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">java.version</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">docker.image.prefix</span>&gt;</span>jzfp<span class="tag">&lt;/<span class="name">docker.image.prefix</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">properties</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">build</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.spotify<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>docker-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>0.4.13<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">imageName</span>&gt;</span>$&#123;docker.image.prefix&#125;/$&#123;project.artifactId&#125;<span class="tag">&lt;/<span class="name">imageName</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">dockerHost</span>&gt;</span>http://host:port<span class="tag">&lt;/<span class="name">dockerHost</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">dockerDirectory</span>&gt;</span>src/main/docker<span class="tag">&lt;/<span class="name">dockerDirectory</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">resources</span>&gt;</span></div><div class="line">                    <span class="tag">&lt;<span class="name">resource</span>&gt;</span></div><div class="line">                        <span class="tag">&lt;<span class="name">targetPath</span>&gt;</span>/<span class="tag">&lt;/<span class="name">targetPath</span>&gt;</span></div><div class="line">                        <span class="tag">&lt;<span class="name">directory</span>&gt;</span>$&#123;project.build.directory&#125;<span class="tag">&lt;/<span class="name">directory</span>&gt;</span></div><div class="line">                        <span class="tag">&lt;<span class="name">include</span>&gt;</span>$&#123;project.build.finalName&#125;.jar<span class="tag">&lt;/<span class="name">include</span>&gt;</span></div><div class="line">                    <span class="tag">&lt;/<span class="name">resource</span>&gt;</span></div><div class="line">                <span class="tag">&lt;/<span class="name">resources</span>&gt;</span></div><div class="line">            <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></div><div class="line"></div><div class="line">        <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">build</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>Spotify的<code>docker-maven-plugin</code>插件是用于构建Maven的Docker镜像。<code>imageName</code>指定了镜像的名称，<code>dockerHost</code>指定了Docker主机的地址，<code>dockerDirectory</code>指定了Dockerfile文件的路径。</p>
+<h3 id="配置Dockerfile"><a href="#配置Dockerfile" class="headerlink" title="配置Dockerfile"></a>配置Dockerfile</h3><p>在<code>src/main/docker</code>下创建<code>Dockerfile</code>，然后编辑：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">FROM frolvlad/alpine-oraclejdk8</div><div class="line">VOLUME /tmp</div><div class="line">ADD gsjzfp-0.0.1-SNAPSHOT.jar app.jar</div><div class="line">ENV JAVA_OPTS=&quot;&quot;</div><div class="line">ENTRYPOINT [ &quot;sh&quot;, &quot;-c&quot;, &quot;java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /app.jar&quot; ]</div></pre></td></tr></table></figure>
+<p>其中，<code>FROM</code>指定了当前镜像集成的基镜像为<code>oraclejdk8</code>；<code>VOLUME</code>指定了临时文件目录为<code>/tmp</code>，该配置会在<code>/var/lib/docker</code>下创建一个临时文件并链接到容器的<code>/tmp</code>目录下；<code>ADD</code>将该应用的jar文件作为<code>app.jar</code>添加到容器里；<code>ENTRYPOINT</code>执行<code>app.jar</code>。</p>
+<h2 id="打包运行"><a href="#打包运行" class="headerlink" title="打包运行"></a>打包运行</h2><h3 id="编译并构建为Docker镜像"><a href="#编译并构建为Docker镜像" class="headerlink" title="编译并构建为Docker镜像"></a>编译并构建为Docker镜像</h3><p>将整个项目目录copy到Docker主机，cd到项目目录下，执行：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mvn clean package docker:build</div></pre></td></tr></table></figure>
+<h3 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run -p 8848:8848 -t jzfp/gsjzfp</div></pre></td></tr></table></figure>
+<p>如果程序运行正确，浏览器访问<code>http://host:8848</code>就能看到Spring Boot应用的主页了。</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-11-10T09:29:52.000Z" itemprop="dateUpdated">2017-11-10 17:29:52</time>
+</span><br>
+
+
+        
+        原文链接：<a href="/2017/11/04/使用Docker打包和部署Spring-Boot应用/" target="_blank" rel="external">https://voidalex.one/2017/11/04/使用Docker打包和部署Spring-Boot应用/</a><br>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/deed.zh">知识共享 署名-非商业性 4.0 国际协议</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://voidalex.one">
+            <img src="/img/avatar.png" alt="voidAlex">
+            voidAlex
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring-Boot/">Spring Boot</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://voidalex.one/2017/11/04/使用Docker打包和部署Spring-Boot应用/&title=《使用Docker打包和部署Spring Boot应用》 — voidAlex的记事本&pic=https://voidalex.one/img/avatar.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://voidalex.one/2017/11/04/使用Docker打包和部署Spring-Boot应用/&title=《使用Docker打包和部署Spring Boot应用》 — voidAlex的记事本&source=
+在Ubuntu 16.04下使用Docker部署Spring Boot应用。这是voidAlex原创的第十一篇博文。" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://voidalex.one/2017/11/04/使用Docker打包和部署Spring-Boot应用/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《使用Docker打包和部署Spring Boot应用》 — voidAlex的记事本&url=https://voidalex.one/2017/11/04/使用Docker打包和部署Spring-Boot应用/&via=https://voidalex.one" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://voidalex.one/2017/11/04/使用Docker打包和部署Spring-Boot应用/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/11/04/Google-Java-Style-Guide在IntelliJ-IDEA中的配置/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Google Java Style Guide在IntelliJ IDEA中的配置</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/11/02/Java补锅笔记：利用反射获得对象的信息/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Java补锅笔记：利用反射获得对象的信息</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+<section class="comments" id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+    var disqus_shortname = 'true';
+    lazyScripts.push('//' + disqus_shortname + '.disqus.com/embed.js')
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢客官~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/deed.zh">知识共享 署名-非商业性使用 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>voidAlex &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://voidalex.one/2017/11/04/使用Docker打包和部署Spring-Boot应用/&title=《使用Docker打包和部署Spring Boot应用》 — voidAlex的记事本&pic=https://voidalex.one/img/avatar.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://voidalex.one/2017/11/04/使用Docker打包和部署Spring-Boot应用/&title=《使用Docker打包和部署Spring Boot应用》 — voidAlex的记事本&source=
+在Ubuntu 16.04下使用Docker部署Spring Boot应用。这是voidAlex原创的第十一篇博文。" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://voidalex.one/2017/11/04/使用Docker打包和部署Spring-Boot应用/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《使用Docker打包和部署Spring Boot应用》 — voidAlex的记事本&url=https://voidalex.one/2017/11/04/使用Docker打包和部署Spring-Boot应用/&via=https://voidalex.one" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://voidalex.one/2017/11/04/使用Docker打包和部署Spring-Boot应用/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACxklEQVR42u3aQW4jMQwEwPz/01lgTwsktrtJyetDzSmwx5MpHSSiya+v+Pr+ez36JP/2553/fv7oev7bAxceHh7e6NXzR//8++f9ybfPl+/5Pck74+Hh4d3mJY9rj418gXJM/is8PDy8T+DNPpktR75YeHh4eJ/My3+VFLuz8h0PDw/vc3hJGNG+0Ka8nr0PHh4e3nt4bQPsE/6+2N/Dw8PDW3TV8605L7I34UL9nnh4eHgXeEmEOgtV8yK7HSyoh7Hw8PDwLvBmtWi79e+XrG2Y4eHh4d3mtVvtqQbY2QPg4T14eHh4h3h5e2mzBG2c0TbMis4eHh4e3pqXb/qzuOF5+ZsPCsyeiYeHh3eDl4QLZ2cTNqNReSDyS38PDw8P7yivPjfi0nZTQLdH0S934uHh4b2Rtx/AOhVSJHc+PHjw8PDwrvGSUYA8gEja+fmgVY4v6nc8PDy8Q7zZdt+2x/LBgrzQf/g0PDw8vLfw2hI5PyoSTFtqv3gHPDw8vAu82RY/K5o3wwHJk/Hw8PDeyUsemixBNAg1aobNWnF4eHh4N3jJ9pozNmNS+XLkbTA8PDy8G7xksz4VNMw2+vYNi14fHh4e3ojXBqanyu68LM4HuYYpNR4eHl7J249Y5fefGvlqlxsPDw/vHm+2Qc9aWbPhgLyp9iKlxsPDw1vzZtFDOwh1qrU2LL7x8PDwjvJmcUMeK7StrDyAiIp4PDw8vGu8qAE/Cnk35fVXeb1og+Hh4eGted/lVQw5lYHsPpJ4OFOGh4eHd5S3asmXRXY7NJCEFPtRAzw8PLwZrz0MNlHFqUXMFwUPDw/vHi8PSXNS3vTaFMTFZAQeHh7ef+XNmlj5eNYm5vhqVxEPDw/vGm+20ecFdF7c12EEHh4e3gVe2/IvitrR8EFevr/4j3h4eHgXeO0m3h4YeSE+CztWQwN4eHh4He8PQGi7YL6FviQAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '基佬快回来~';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '一起来van♂游戏吧';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Java爬虫：上车吧！爬取妹子图 | voidAlex的记事本 | 长路漫漫，唯剑作伴</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="爬虫,Java">
+    <meta name="description" content="这是voidAlex原创的第三篇博文。源码在我的GitHub">
+<meta name="keywords" content="爬虫,Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java爬虫：上车吧！爬取妹子图">
+<meta property="og:url" content="https://voidalex.one/2017/07/20/Java爬虫：爬取妹子图/index.html">
+<meta property="og:site_name" content="voidAlex的记事本">
+<meta property="og:description" content="这是voidAlex原创的第三篇博文。源码在我的GitHub">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://osuro1ft2.bkt.clouddn.com//17-7-20/99168668.jpg">
+<meta property="og:image" content="http://osuro1ft2.bkt.clouddn.com//17-7-20/68438084.jpg">
+<meta property="og:image" content="http://osuro1ft2.bkt.clouddn.com//17-7-20/40407389.jpg">
+<meta property="og:updated_time" content="2017-07-20T04:56:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java爬虫：上车吧！爬取妹子图">
+<meta name="twitter:description" content="这是voidAlex原创的第三篇博文。源码在我的GitHub">
+<meta name="twitter:image" content="http://osuro1ft2.bkt.clouddn.com//17-7-20/99168668.jpg">
+    
+        <link rel="alternate" type="application/atom+xml" title="voidAlex的记事本" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">voidAlex</h5>
+          <a href="mailto:wangld1994@gmail.com" title="wangld1994@gmail.com" class="mail">wangld1994@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签云
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/voidAlex" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                GitHub
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="http://www.weibo.com/wangld1994" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                微博
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-info"></i>
+                关于
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Java爬虫：上车吧！爬取妹子图</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Java爬虫：上车吧！爬取妹子图</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-07-20T01:10:38.000Z" itemprop="datePublished" class="page-time">
+  2017-07-20
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#爬虫"><span class="post-toc-number">1.</span> <span class="post-toc-text">爬虫</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#引入JSOUP"><span class="post-toc-number">2.</span> <span class="post-toc-text">引入JSOUP</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#查看网页源码"><span class="post-toc-number">3.</span> <span class="post-toc-text">查看网页源码</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#downloadImage方法"><span class="post-toc-number">4.</span> <span class="post-toc-text">downloadImage方法</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#解析HTML"><span class="post-toc-number">5.</span> <span class="post-toc-text">解析HTML</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#煎蛋妹子图"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">煎蛋妹子图</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#优妹子"><span class="post-toc-number">5.2.</span> <span class="post-toc-text">优妹子</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#运行"><span class="post-toc-number">6.</span> <span class="post-toc-text">运行</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-Java爬虫：爬取妹子图"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Java爬虫：上车吧！爬取妹子图</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-07-20 09:10:38" datetime="2017-07-20T01:10:38.000Z"  itemprop="datePublished">2017-07-20</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>这是voidAlex原创的第三篇博文。<br>源码在<a href="https://github.com/voidAlex/Meizi_Crawler" target="_blank" rel="noopener">我的GitHub</a><br><a id="more"></a></p>
+</blockquote>
+<h2 id="爬虫"><a href="#爬虫" class="headerlink" title="爬虫"></a>爬虫</h2><p>上一篇博文介绍了如何模拟登录和解析JSON数据，这篇博文介绍怎么爬取不需要登录的网站的信息。</p>
+<p>上一篇博文中关于爬虫的介绍可以点<a href="https://voidalex.github.io/2017/07/09/Java%E7%88%AC%E8%99%AB%EF%BC%9A%E7%88%AC%E5%8F%96%E5%AD%A6%E6%A0%A1%E6%95%99%E5%8A%A1%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E7%9A%84%E4%BF%A1%E6%81%AF/" target="_blank" rel="noopener">这里</a>查看。</p>
+<h2 id="引入JSOUP"><a href="#引入JSOUP" class="headerlink" title="引入JSOUP"></a>引入JSOUP</h2><p>在<code>pom.xml</code>中添加JSOUP依赖：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.jsoup<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jsoup<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.10.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>JSOUP是一款Java的HTML解析库，可以解析HTML中的文本内容。它的官网地址是<a href="https://jsoup.org/" target="_blank" rel="noopener">https://jsoup.org/</a>。</p>
+<h2 id="查看网页源码"><a href="#查看网页源码" class="headerlink" title="查看网页源码"></a>查看网页源码</h2><p>好了，要干正事了。Google一下妹子图，找到这两个网站：<a href="http://jandan.net/ooxx" target="_blank" rel="noopener">http://jandan.net/ooxx</a>，<a href="http://www.youmzi.com/tuinvlang.html" target="_blank" rel="noopener">http://www.youmzi.com/tuinvlang.html</a>.先看第一个，它的源码长这样：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://osuro1ft2.bkt.clouddn.com//17-7-20/99168668.jpg" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>我们要找的是所有的img标签里的URL，然后把它下载下来。但是这样似乎只能爬取单个页面的妹子图？所以我们还要找到下一页的URL：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://osuro1ft2.bkt.clouddn.com//17-7-20/68438084.jpg" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>恩，找到了。开始写代码吧！</p>
+<h2 id="downloadImage方法"><a href="#downloadImage方法" class="headerlink" title="downloadImage方法"></a>downloadImage方法</h2><p>首先写一个下载图片的方法，该方法传入图片的URL和要写入的路径，然后将文件写入本地。需要调用<code>java.net</code>包中的一些方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">downloadImage</span><span class="params">(String imageUrl, String path)</span> </span>&#123;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="comment">//分割字符串，获得文件名</span></div><div class="line">        String filePath = path + imageUrl.substring(imageUrl.lastIndexOf(<span class="string">"/"</span>));</div><div class="line">        <span class="comment">//获得文件流</span></div><div class="line">        URL url = <span class="keyword">new</span> URL(imageUrl);</div><div class="line">        HttpURLConnection connection = (HttpURLConnection)url.openConnection();</div><div class="line">        connection.setConnectTimeout(<span class="number">10000</span>);</div><div class="line">        connection.setReadTimeout(<span class="number">10000</span>);</div><div class="line">        InputStream in = connection.getInputStream();</div><div class="line"></div><div class="line">        <span class="comment">//写入本地文件</span></div><div class="line">        File file = <span class="keyword">new</span> File(filePath);</div><div class="line">        FileOutputStream out = <span class="keyword">new</span> FileOutputStream(file);</div><div class="line">        <span class="keyword">int</span> i = <span class="number">0</span>;</div><div class="line">        <span class="keyword">while</span> ((i = in.read()) != -<span class="number">1</span>)&#123;</div><div class="line">            out.write(i);</div><div class="line">        &#125;</div><div class="line">        System.out.println(imageUrl + <span class="string">"下载成功"</span>);</div><div class="line">        out.close();</div><div class="line">        in.close();</div><div class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">    &#125;<span class="keyword">catch</span> (Exception e)&#123;</div><div class="line">        System.out.println(imageUrl + <span class="string">"下载失败"</span>);</div><div class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>需要注意的是要设置超时的时间，要不然会导致很多的图片下载失败。</p>
+<h2 id="解析HTML"><a href="#解析HTML" class="headerlink" title="解析HTML"></a>解析HTML</h2><p>接下来我们需要理一理这个爬虫的思路：</p>
+<ol>
+<li>打开这个网页。获取到网页所有图片的URL，然后遍历这些URL去下载图片；</li>
+<li>当遍历结束后，去找下一页的URL，然后执行1；</li>
+<li>直到找不到下一页的URL为止。</li>
+</ol>
+<h3 id="煎蛋妹子图"><a href="#煎蛋妹子图" class="headerlink" title="煎蛋妹子图"></a>煎蛋妹子图</h3><p>首先用<code>jsoup</code>中的方法获取到网页并且得到Document对象：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Document doc = <span class="keyword">null</span>;</div><div class="line">doc = Jsoup.connect(url).get();</div></pre></td></tr></table></figure>
+<p>获得所有的img标签：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Elements elements = doc.getElementsByTag(<span class="string">"img"</span>);</div></pre></td></tr></table></figure>
+<p>遍历这些标签并且下载：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (Element element : elements)&#123;</div><div class="line">    <span class="comment">//获取标签中src属性的绝对路径</span></div><div class="line">    String imgSrc = element.attr(<span class="string">"abs:src"</span>);</div><div class="line">    <span class="keyword">if</span> (downloadImage(imgSrc, path))&#123;</div><div class="line">        count ++;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>获取下一页的地址，如果没有则退出循环:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">    url = doc.getElementsByClass(<span class="string">"previous-comment-page"</span>).get(<span class="number">0</span>)</div><div class="line">            .getElementsByTag(<span class="string">"a"</span>).attr(<span class="string">"abs:href"</span>);</div><div class="line">&#125;<span class="keyword">catch</span> (Exception e)&#123;</div><div class="line">    System.out.println(<span class="string">"没链接了~"</span>);</div><div class="line">    <span class="keyword">break</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>大功告成！</p>
+<h3 id="优妹子"><a href="#优妹子" class="headerlink" title="优妹子"></a>优妹子</h3><p>第二个网站的略微复杂一点，上方有导航栏，每一页有若干个专题，点击进去了才是大图。所以需要爬取的链接稍微多一点。</p>
+<p>首先还是获取到网页并且得到Document对象：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Document doc = <span class="keyword">null</span>;</div><div class="line">doc = Jsoup.connect(url).get();</div></pre></td></tr></table></figure>
+<p>然后获得每一个二级页面（即专题）的URL，并放到一个List里面：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Elements imageUrl = doc.getElementsByClass(<span class="string">"tzpic3-mzindex"</span>).get(<span class="number">0</span>).getElementsByTag(<span class="string">"a"</span>);</div><div class="line">ArrayList&lt;String&gt; urlList = <span class="keyword">new</span> ArrayList&lt;String&gt;();</div><div class="line"><span class="keyword">for</span> (Element element : imageUrl)&#123;</div><div class="line">    urlList.add(element.attr(<span class="string">"abs:href"</span>));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>对于List里的每一个URL，去找它每一个的img标签并且获取下一页的URL：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (String s : urlList)&#123;</div><div class="line">    String next = s;</div><div class="line">    <span class="keyword">while</span> (<span class="keyword">true</span>)&#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            doc = Jsoup.connect(next).get();</div><div class="line">        &#125;<span class="keyword">catch</span> (IOException e)&#123;</div><div class="line">            System.out.println(url + <span class="string">"请求失败"</span>);</div><div class="line">        &#125;</div><div class="line">        Element e = doc.getElementsByClass(<span class="string">"arpic"</span>).get(<span class="number">0</span>);</div><div class="line">        <span class="comment">//获取所有img标签</span></div><div class="line">        Elements elements = e.getElementsByTag(<span class="string">"img"</span>);</div><div class="line">        <span class="keyword">for</span> (Element element : elements)&#123;</div><div class="line">            <span class="comment">//获取标签中src属性的绝对路径</span></div><div class="line">            String imgSrc = element.attr(<span class="string">"abs:src"</span>);</div><div class="line">            <span class="keyword">if</span> (downloadImage(imgSrc, path))&#123;</div><div class="line">                count ++;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        String tmp = next;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            Elements nextPage = doc.getElementsByClass(<span class="string">"jogger2"</span>).get(<span class="number">0</span>).getElementsByTag(<span class="string">"a"</span>);</div><div class="line"></div><div class="line">            next = <span class="keyword">null</span>;</div><div class="line">            <span class="keyword">for</span> (Element element : nextPage)&#123;</div><div class="line">                <span class="comment">//获取标签中src属性的绝对路径</span></div><div class="line">                <span class="keyword">if</span> (element.text().equals(<span class="string">"下一页"</span>))&#123;</div><div class="line">                    next = element.attr(<span class="string">"abs:href"</span>);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;<span class="keyword">catch</span> (Exception ex)&#123;</div><div class="line">            System.out.println(<span class="string">"没链接了~"</span>);</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (next == <span class="keyword">null</span> || tmp.equals(next))&#123;</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> <span class="keyword">throws</span> Exception</span>&#123;</div><div class="line">    String path = <span class="string">"image"</span>;</div><div class="line">    jiandan(path);</div><div class="line">    youmeizi(path);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>跑了两个多小时终于跑完了，看一下战果：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://osuro1ft2.bkt.clouddn.com//17-7-20/40407389.jpg" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>恩，将近1w张。不说了，我先喝瓶营养快线去~</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-07-20T04:56:25.000Z" itemprop="dateUpdated">2017-07-20 12:56:25</time>
+</span><br>
+
+
+        
+        原文链接：<a href="/2017/07/20/Java爬虫：爬取妹子图/" target="_blank" rel="external">https://voidalex.one/2017/07/20/Java爬虫：爬取妹子图/</a><br>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/deed.zh">知识共享 署名-非商业性 4.0 国际协议</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://voidalex.one">
+            <img src="/img/avatar.png" alt="voidAlex">
+            voidAlex
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/爬虫/">爬虫</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://voidalex.one/2017/07/20/Java爬虫：爬取妹子图/&title=《Java爬虫：上车吧！爬取妹子图》 — voidAlex的记事本&pic=https://voidalex.one/img/avatar.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://voidalex.one/2017/07/20/Java爬虫：爬取妹子图/&title=《Java爬虫：上车吧！爬取妹子图》 — voidAlex的记事本&source=
+这是voidAlex原创的第三篇博文。源码在我的GitHub" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://voidalex.one/2017/07/20/Java爬虫：爬取妹子图/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java爬虫：上车吧！爬取妹子图》 — voidAlex的记事本&url=https://voidalex.one/2017/07/20/Java爬虫：爬取妹子图/&via=https://voidalex.one" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://voidalex.one/2017/07/20/Java爬虫：爬取妹子图/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/07/23/算法笔记：一元线性回归及Java实现/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">算法笔记：一元线性回归及Java实现</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/07/09/Java爬虫：爬取学校教务管理系统的信息/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Java爬虫：爬取学校教务管理系统的信息</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+<section class="comments" id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+    var disqus_shortname = 'true';
+    lazyScripts.push('//' + disqus_shortname + '.disqus.com/embed.js')
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢客官~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/deed.zh">知识共享 署名-非商业性使用 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>voidAlex &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://voidalex.one/2017/07/20/Java爬虫：爬取妹子图/&title=《Java爬虫：上车吧！爬取妹子图》 — voidAlex的记事本&pic=https://voidalex.one/img/avatar.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://voidalex.one/2017/07/20/Java爬虫：爬取妹子图/&title=《Java爬虫：上车吧！爬取妹子图》 — voidAlex的记事本&source=
+这是voidAlex原创的第三篇博文。源码在我的GitHub" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://voidalex.one/2017/07/20/Java爬虫：爬取妹子图/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java爬虫：上车吧！爬取妹子图》 — voidAlex的记事本&url=https://voidalex.one/2017/07/20/Java爬虫：爬取妹子图/&via=https://voidalex.one" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://voidalex.one/2017/07/20/Java爬虫：爬取妹子图/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACKklEQVR42u3aQXKDMAwFUO5/6XTbmTb0S4K22I9VJiTYzwthST6O+Hp9ut7dfff7r/9Nvj/uuDAwMB7LeJ1e5wNPFqI37ts5YGBgbMA4D6N5uDx/5vny5c/BwMDASB7XDItx8MXAwMCYB9wEUN3w/cF7AwMD41GM/NGTMJ2nuzfm4hgYGA9k9B79O59v6W9gYGA8itHb2E0S0bzZWZgVBgbG0ox5ET9vG+St0Op8MDAw1mZcW1BLwnE+VnLs7Ja6IAYGxr9kVNuH1RA5SVyjkh8GBsYGjOrBr+pBijwEV49rHNV3BQYGxgMZ1dA2CdCTpUmWCQMDY1VGr3A2Kt8HoXMUZDEwMBZl5K3HXlo7n+gP32NgYGzASMJfshHsBdxq8/KHFiYGBsYGjGoG3Cv097aMo9MiGBgYD2f0hqzeLR+hiF8DGBgYazPyElu1xF9tJ/TalhgYGDswekcfri26JcvRHAYDA2MJRj5ktcR2VWKczw0DA2NtRtK8rKav1c1iddW/uYuBgbEBo3fcIZ/6ZHsaPRkDA2MDxiTg5r+v1gIL/8XAwNiMMSnGVdPXedKLgYGxNuNVvKqbtnljIHoNYGBgLM2odgar4F54TabebHNiYGA8lpEH2bxvmDcme2wMDIw9GdXjF/nGLgFckABjYGBgDFLWanrcpGJgYGAMGpxJq/KCbSUGBsYGjLwZ0Eto85S1t0wYGBhrM/LU8apv5pvLZiMTAwPjeYwPOp8ZBo6vVkAAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '基佬快回来~';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '一起来van♂游戏吧';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

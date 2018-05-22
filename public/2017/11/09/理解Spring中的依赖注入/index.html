@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>理解Spring中的依赖注入 | voidAlex的记事本 | 长路漫漫，唯剑作伴</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Java,Spring">
+    <meta name="description" content="这是voidAlex原创的第十七篇博文。">
+<meta name="keywords" content="Java,Spring">
+<meta property="og:type" content="article">
+<meta property="og:title" content="理解Spring中的依赖注入">
+<meta property="og:url" content="https://voidalex.one/2017/11/09/理解Spring中的依赖注入/index.html">
+<meta property="og:site_name" content="voidAlex的记事本">
+<meta property="og:description" content="这是voidAlex原创的第十七篇博文。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://osuro1ft2.bkt.clouddn.com//17-11-10/77388616.jpg">
+<meta property="og:updated_time" content="2017-11-10T09:24:10.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="理解Spring中的依赖注入">
+<meta name="twitter:description" content="这是voidAlex原创的第十七篇博文。">
+<meta name="twitter:image" content="http://osuro1ft2.bkt.clouddn.com//17-11-10/77388616.jpg">
+    
+        <link rel="alternate" type="application/atom+xml" title="voidAlex的记事本" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">voidAlex</h5>
+          <a href="mailto:wangld1994@gmail.com" title="wangld1994@gmail.com" class="mail">wangld1994@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签云
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/voidAlex" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                GitHub
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="http://www.weibo.com/wangld1994" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                微博
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-info"></i>
+                关于
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">理解Spring中的依赖注入</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">理解Spring中的依赖注入</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-11-09T12:55:00.000Z" itemprop="datePublished" class="page-time">
+  2017-11-09
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#依赖注入和控制翻转"><span class="post-toc-number">1.</span> <span class="post-toc-text">依赖注入和控制翻转</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#实例"><span class="post-toc-number">2.</span> <span class="post-toc-text">实例</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#传统的做法"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">传统的做法</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#面向接口编程"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">面向接口编程</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#动态生成对象"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">动态生成对象</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#使用Spring的DI"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">使用Spring的DI</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#总结"><span class="post-toc-number">3.</span> <span class="post-toc-text">总结</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#参考资料"><span class="post-toc-number">4.</span> <span class="post-toc-text">参考资料</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-理解Spring中的依赖注入"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">理解Spring中的依赖注入</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-11-09 20:55:00" datetime="2017-11-09T12:55:00.000Z"  itemprop="datePublished">2017-11-09</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>这是voidAlex原创的第十七篇博文。<br><a id="more"></a></p>
+</blockquote>
+<h2 id="依赖注入和控制翻转"><a href="#依赖注入和控制翻转" class="headerlink" title="依赖注入和控制翻转"></a>依赖注入和控制翻转</h2><p><code>IoC</code>(Inversion of Control，控制翻转)和<code>DI</code>(Dependency Injection，依赖注入)在Spring下是同等的概念。控制翻转是通过依赖注入来实现的。依赖注入是指由容器负责创建对象和负责维护对象间的依赖关系，从而实现解耦，体现一种组合的理念。</p>
+<p>任何一个实际的应用，都会由两个或者更多的类组成。这些类之间相互调用以完成特定的业务逻辑。每个对象负责管理和调用与自己相互协作的对象，这会导致高度耦合的代码。</p>
+<p>耦合具有两面性。一方面，高度耦合的代码将会难以测试，难以复用，难以理解，并且会表现出“打地鼠”式的bug特性（修复一个bug，又出现更多的新bug）。但是，一定程度的耦合又是必须的，完全没有耦合的代码什么也做不了。为了完成特定的功能，不同的代码之间必须进行交互。</p>
+<p>通过依赖注入，创建被调用者的工作不再由调用者来完成，而是由Spring容器来完成，然后注入到调用者。这也意味着，当需要切换依赖的时候，不需要改变调用者的代码。依赖关系将被自动注入到需要它们的对象当中去。</p>
+<p>知乎上有个回答，总结的相当到位。原文点<a href="https://www.zhihu.com/question/27053548/answer/113488399" target="_blank" rel="noopener">这里</a>。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://osuro1ft2.bkt.clouddn.com//17-11-10/77388616.jpg" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><h3 id="传统的做法"><a href="#传统的做法" class="headerlink" title="传统的做法"></a>传统的做法</h3><p>考虑下面代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JayChouCD</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">()</span></span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CDPlayer</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> JayChouCD cd;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">playCD</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.cd = <span class="keyword">new</span> JayChouCD();</div><div class="line">        <span class="keyword">this</span>.cd.play();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们有一个CD机，它需要一张CD才能够播放，或者说，<code>CDPlayer</code>依赖于<code>CD</code>。在上面的代码中，我们直接通过<code>new</code>关键字给<code>CDPlayer</code>创建了一个<code>JayChouCD</code>的实例，这样我们就能在这个CD机上听周杰伦的歌了。</p>
+<h3 id="面向接口编程"><a href="#面向接口编程" class="headerlink" title="面向接口编程"></a>面向接口编程</h3><p>但是，这样做，我们能够听的歌十分有限，只能在这个CD机上听周杰伦的CD。考虑使用面向接口的编程方式改写上面的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">CD</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">play</span><span class="params">()</span></span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CDPlayer</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> CD cd;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">playCD</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.cd = <span class="keyword">new</span> JayChouCD();</div><div class="line">        <span class="keyword">this</span>.cd.play();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>与CD机直接打交道的类变成了<code>CD</code>，即使它最终实现依然是<code>JayChouCD</code>，但是这样做已经有明显的好处，所有调用都通过接口<code>CD</code>来完成。需要替换<code>JayChouCD</code>类，想听其他人的歌时，也只需要修改<code>CD</code>指向新的实现类。</p>
+<h3 id="动态生成对象"><a href="#动态生成对象" class="headerlink" title="动态生成对象"></a>动态生成对象</h3><p>虽然上述代码已经很大程度的降低了耦合，但是耦合依然存在。想听其他人的歌曲时依然需要修改<code>CDPlayer</code>类内部的代码。当依赖过多的时候，修改起来会相当的麻烦。考虑通过反射机制中的动态加载类来修改上述代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">CD</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">play</span><span class="params">()</span></span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> class <span class="title">CDPlayer</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> String CLASS_NAME = <span class="string">"JayChouCD"</span>;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> CD cd;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">playCD</span><span class="params">()</span> </span>&#123;</div><div class="line">        Class <span class="class"><span class="keyword">class</span> </span>= Class.forName(CLASS_NAME);</div><div class="line"></div><div class="line">        <span class="keyword">this</span>.cd = (CD) <span class="class"><span class="keyword">class</span>.<span class="title">newInstance</span>()</span>;</div><div class="line">        <span class="keyword">this</span>.cd.play();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样，我们动态的得到了<code>CD</code>的实例，不必每次都为听谁的歌而苦恼了，只需要告诉CD机类名即可。获得类名可以通过配置文件去实现。这样我们就实现了<code>CD</code>和<code>CDPlayer</code>间的解耦。实际上，Spring中DI的底层就是通过反射机制来实现的。</p>
+<h3 id="使用Spring的DI"><a href="#使用Spring的DI" class="headerlink" title="使用Spring的DI"></a>使用Spring的DI</h3><p> Spring支持使用<code>xml</code>、<code>Java Config</code>和注解去装配Bena。Spring Boot推荐使用注解和<code>Java Config</code>的方式。使用Spring Boot的方式继续改造上面的代码：</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">CD</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">play</span><span class="params">()</span></span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="meta">@Component</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JayChouCD</span> <span class="keyword">implements</span> <span class="title">CD</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> String title = <span class="string">"哎呦，不错哦！"</span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(title);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> class <span class="title">CDPlayer</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="meta">@Autowired</span></div><div class="line">    <span class="keyword">private</span> CD cd;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">playCD</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.cd.play();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p> 首先使用<code>@Component</code>注解告诉Spring，这个类是一个让你进行管理的bean，这意味着在其他类中可以通过Spring的依赖注入来得到它的实例。所以，在<code>CDPlayer</code>类中，我们使用了<code>@Autowired</code>注解，来将一个<code>CD</code>注入到<code>CDPlayer</code>中。</p>
+<p> Spring中，所有的Bean都通过IoC容器（ApplicationContext）来创建，并负责注入到需要的bean中。Spring Boot中，有四种常用的声明Bena的注解：</p>
+<blockquote>
+<ul>
+<li><code>@Component</code>：组件，没有明确的角色</li>
+<li><code>@Service</code>：在业务逻辑层使用（Service层）</li>
+<li><code>@Repository</code>：在数据访问层使用（dao层）</li>
+<li><code>@Controller</code>：在展现层使用（MVC）</li>
+</ul>
+</blockquote>
+<p> 注入Bena的注解，一般情况下通用：</p>
+<blockquote>
+<ul>
+<li><code>@Autowried</code>：Spring提供的注解</li>
+<li><code>@Inject</code></li>
+<li><code>@Resource</code></li>
+</ul>
+</blockquote>
+<p> 这三个注解都可以用在属性、<code>set</code>方法、构造方法上。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p> 一句话：控制翻转是将对象的创建权翻转给Spring，依赖注入是在Spring创建对象的过程中，把对象依赖的属性注入到类中。控制翻转是通过依赖注入来实现的。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p> 《精通Spring 4.x 企业应用开发实战》</p>
+<p> 《Spring实战》</p>
+<p> <a href="http://blog.csdn.net/javazejian/article/details/54561302" target="_blank" rel="noopener">CSND博客：关于Spring IOC (DI-依赖注入)你需要知道的一切</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-11-10T09:24:10.000Z" itemprop="dateUpdated">2017-11-10 17:24:10</time>
+</span><br>
+
+
+        
+        原文链接：<a href="/2017/11/09/理解Spring中的依赖注入/" target="_blank" rel="external">https://voidalex.one/2017/11/09/理解Spring中的依赖注入/</a><br>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/deed.zh">知识共享 署名-非商业性 4.0 国际协议</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://voidalex.one">
+            <img src="/img/avatar.png" alt="voidAlex">
+            voidAlex
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring/">Spring</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://voidalex.one/2017/11/09/理解Spring中的依赖注入/&title=《理解Spring中的依赖注入》 — voidAlex的记事本&pic=https://voidalex.one/img/avatar.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://voidalex.one/2017/11/09/理解Spring中的依赖注入/&title=《理解Spring中的依赖注入》 — voidAlex的记事本&source=
+这是voidAlex原创的第十七篇博文。" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://voidalex.one/2017/11/09/理解Spring中的依赖注入/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《理解Spring中的依赖注入》 — voidAlex的记事本&url=https://voidalex.one/2017/11/09/理解Spring中的依赖注入/&via=https://voidalex.one" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://voidalex.one/2017/11/09/理解Spring中的依赖注入/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/02/19/一种在服务器上部署Hexo博客的思路/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">一种在服务器上部署Hexo博客的思路</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/11/08/Docker容器间的互联/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Docker容器间的互联</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+<section class="comments" id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+    var disqus_shortname = 'true';
+    lazyScripts.push('//' + disqus_shortname + '.disqus.com/embed.js')
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢客官~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/deed.zh">知识共享 署名-非商业性使用 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>voidAlex &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://voidalex.one/2017/11/09/理解Spring中的依赖注入/&title=《理解Spring中的依赖注入》 — voidAlex的记事本&pic=https://voidalex.one/img/avatar.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://voidalex.one/2017/11/09/理解Spring中的依赖注入/&title=《理解Spring中的依赖注入》 — voidAlex的记事本&source=
+这是voidAlex原创的第十七篇博文。" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://voidalex.one/2017/11/09/理解Spring中的依赖注入/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《理解Spring中的依赖注入》 — voidAlex的记事本&url=https://voidalex.one/2017/11/09/理解Spring中的依赖注入/&via=https://voidalex.one" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://voidalex.one/2017/11/09/理解Spring中的依赖注入/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACuUlEQVR42u3aQW4CMQwF0N7/0lTqFs3wbcdApTcrRCHkpVJs2f75iZ/H35N85vm5X+35M1d/TfbQfPDw8PBaW7/f3PPrZFv361ztITniZM94eHh427ze9Z0Hg2Sd+/fzY8LDw8P7Hl4SHnJSFYmHh4f3H3n5hvJCQ69sgYeHh/cNvKQYkaTL1WJrXmJYr7Xg4eHhdWoFhU189vVifw8PDw9v0FXvXbvV6zsv15b3iYeHh7fAm6TCyT2cXOjJ5/PjOJbp4+Hh4V2sX72Cq42xPLRUA09U/MXDw8Nb4PVa/nnrq1qWTSoJ1YYcHh4e3h4vDwzVZHpeUMgD2KhGgoeHhxfzzvbT8rGD6oGOJiPw8PDwFnjJhVtNfHulhN53Cw0wPDw8vAEv+WivwV8t1ObU/BDx8PDwNnhJytvDV6/4POTkR4mHh4e3watucdJVS056Ugi+/L/h4eHhHeXlgLwgmyfceZKdD2wVmmF4eHh4Y161wJqn2nnRIbn0q6ELDw8Pb4NXvdZ7g1O91lo+moCHh4f3Hl5v7Kk3VpWvMB/2elHGxcPDwxvz8k0n+FGbPz6UqMCBh4eHt8Dr/UAeDPLAMBlZeHGUeHh4eEd5+Rfyxlg1Ha8OFuTpNR4eHt4Gr7d0rzU1aZJVDw4PDw/v/bxesbVX5M0LIvnR4OHh4W3zJiWJakpdTYiPrYyHh4d3lDe5jnsFi8k7zdErPDw8vAXexvBTftEn6XLv1/Hw8PDO8h7FpxcYJkMA+fsv+nt4eHh4h3jVC7fa2q+GmSS93ghmeHh4eFVeL8HNSwm9wvG8wYaHh4e3zasOXfU6TTm72jC7DA94eHh4X8DLE+JJG6x6lJexAA8PD++jvElTKk+pk+S+cPR4eHh4a7x80bx9Ncf0QgseHh7eNq93uc8HAvI0ulr+wMPDw1vj/QL9LLtgBH3arAAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '基佬快回来~';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '一起来van♂游戏吧';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

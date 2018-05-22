@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Docker容器间的互联 | voidAlex的记事本 | 长路漫漫，唯剑作伴</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Docker">
+    <meta name="description" content="这是voidAlex原创的第十六篇博文。">
+<meta name="keywords" content="Docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker容器间的互联">
+<meta property="og:url" content="https://voidalex.one/2017/11/08/Docker容器间的互联/index.html">
+<meta property="og:site_name" content="voidAlex的记事本">
+<meta property="og:description" content="这是voidAlex原创的第十六篇博文。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-11-10T09:26:57.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Docker容器间的互联">
+<meta name="twitter:description" content="这是voidAlex原创的第十六篇博文。">
+    
+        <link rel="alternate" type="application/atom+xml" title="voidAlex的记事本" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">voidAlex</h5>
+          <a href="mailto:wangld1994@gmail.com" title="wangld1994@gmail.com" class="mail">wangld1994@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签云
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/voidAlex" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                GitHub
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="http://www.weibo.com/wangld1994" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                微博
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-info"></i>
+                关于
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Docker容器间的互联</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Docker容器间的互联</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-11-08T08:55:53.000Z" itemprop="datePublished" class="page-time">
+  2017-11-08
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#端口映射"><span class="post-toc-number">1.</span> <span class="post-toc-text">端口映射</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#容器链接"><span class="post-toc-number">2.</span> <span class="post-toc-text">容器链接</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#实例"><span class="post-toc-number">3.</span> <span class="post-toc-text">实例</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#启动mysql容器"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">启动mysql容器</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#配置Spring-Boot数据库连接"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">配置Spring Boot数据库连接</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#启动Spring-Boot容器，链接到mysql"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">启动Spring Boot容器，链接到mysql</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#总结"><span class="post-toc-number">3.4.</span> <span class="post-toc-text">总结</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-Docker容器间的互联"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Docker容器间的互联</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-11-08 16:55:53" datetime="2017-11-08T08:55:53.000Z"  itemprop="datePublished">2017-11-08</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>这是voidAlex原创的第十六篇博文。<br><a id="more"></a></p>
+</blockquote>
+<p>在Docker中，容器间是相互独立的。各个容器有自己的进程空间、文件系统、网络空间等。然而，容器如果不能和外界通信，是没用什么卵用的。它们只有相互通信的时候才能发挥作用。</p>
+<h2 id="端口映射"><a href="#端口映射" class="headerlink" title="端口映射"></a>端口映射</h2><p>实际上，在之前使用<code>Spring Boot</code>和<code>mysql</code>的文章中已经在使用端口绑定了。在启动容器的时候可以可以加<code>-p</code>参数将容器的端口绑定到宿主机的端口：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run <span class="_">-d</span> --name myMysql --volumes-from sqldata <span class="_">-e</span> MYSQL_ROOT_PASSWORD=123456 -p 3307:3306 mysql</div></pre></td></tr></table></figure>
+<p>上面这条命令就是将<code>mysql</code>在容器中的<code>3306</code>端口映射到了宿主机的<code>3307</code>端口。然后通过宿主机的IP和端口，就能在外部访问这个<code>mysql</code>容器了。</p>
+<h2 id="容器链接"><a href="#容器链接" class="headerlink" title="容器链接"></a>容器链接</h2><p>使用容器链接可以更方便的实现容器间互联。将一个容器链接到另一个容器时，Docker会添加一些环境变量来获取关联容器之间的信息。在启动容器的时候使用<code>--link</code>参数来链接其他容器：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run -p 8848:8848 --name jzfp --link myMysql -t jzfp/gsjzfp</div></pre></td></tr></table></figure>
+<p>启动后，该容器会将<code>myMysql</code>的网络信息以环境变量的形式添加到<code>jzfp</code>容器中，使得这个容器能够访问它。</p>
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><p>在Docker部署<code>Spring Boot</code>应用，并且通过容器链接来访问<code>mysql</code>中的数据。</p>
+<h3 id="启动mysql容器"><a href="#启动mysql容器" class="headerlink" title="启动mysql容器"></a>启动mysql容器</h3><p>首先启动一个<code>mysql</code>容器，映射到宿主机的<code>8849</code>端口：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run <span class="_">-d</span> --name myMysql --volumes-from sqldata <span class="_">-e</span> MYSQL_ROOT_PASSWORD=123456 -p 8849:3306 mysql</div></pre></td></tr></table></figure>
+<p>进入容器，设置外部访问账户：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">docker <span class="built_in">exec</span> -t -i myMysql /bin/bash</div><div class="line">mysql -uroot -p</div><div class="line">grant all on *.* to <span class="string">'test'</span>@<span class="string">'%'</span> identified by <span class="string">'1234'</span>;</div></pre></td></tr></table></figure>
+<p>这时候，容器外部可以通过<code>8849</code>端口，使用<code>test</code>账户访问<code>mysql</code>。</p>
+<h3 id="配置Spring-Boot数据库连接"><a href="#配置Spring-Boot数据库连接" class="headerlink" title="配置Spring Boot数据库连接"></a>配置Spring Boot数据库连接</h3><p>修改<code>application.properties</code>中的数据库连接配置：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">spring.datasource.url = jdbc:mysql://myMysql:3306/jzfpsd?characterEncoding=UTF-8</div><div class="line">spring.datasource.username = <span class="built_in">test</span></div><div class="line">spring.datasource.password = 1234</div><div class="line">spring.datasource.driver-class-name = com.mysql.jdbc.Driver</div></pre></td></tr></table></figure>
+<p>可以看到，我们直接配置了数据库的IP地址为<code>myMysql</code>容器的名称。在启动该容器链接到<code>myMysql</code>后，即可通过Docker添加的环境变量去访问<code>myMysql</code>容器。</p>
+<p>编译<code>Spring Boot</code>应用并生成镜像：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mvn clean package -Dmaven.test.skip=<span class="literal">true</span> docker:build</div></pre></td></tr></table></figure>
+<h3 id="启动Spring-Boot容器，链接到mysql"><a href="#启动Spring-Boot容器，链接到mysql" class="headerlink" title="启动Spring Boot容器，链接到mysql"></a>启动Spring Boot容器，链接到mysql</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run -p 8848:8848 --name jzfp --link myMysql -t jzfp/gsjzfp</div></pre></td></tr></table></figure>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>使用Docker，即可在一台宿主机上实现数据库与WEB应用的分离。而且由于容器间链接和数据卷的特性，我们可以很方便的使用Docker打包数据文件和镜像，真正的实现一次打包，到处运行。</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-11-10T09:26:57.000Z" itemprop="dateUpdated">2017-11-10 17:26:57</time>
+</span><br>
+
+
+        
+        原文链接：<a href="/2017/11/08/Docker容器间的互联/" target="_blank" rel="external">https://voidalex.one/2017/11/08/Docker容器间的互联/</a><br>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/deed.zh">知识共享 署名-非商业性 4.0 国际协议</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://voidalex.one">
+            <img src="/img/avatar.png" alt="voidAlex">
+            voidAlex
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://voidalex.one/2017/11/08/Docker容器间的互联/&title=《Docker容器间的互联》 — voidAlex的记事本&pic=https://voidalex.one/img/avatar.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://voidalex.one/2017/11/08/Docker容器间的互联/&title=《Docker容器间的互联》 — voidAlex的记事本&source=
+这是voidAlex原创的第十六篇博文。" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://voidalex.one/2017/11/08/Docker容器间的互联/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Docker容器间的互联》 — voidAlex的记事本&url=https://voidalex.one/2017/11/08/Docker容器间的互联/&via=https://voidalex.one" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://voidalex.one/2017/11/08/Docker容器间的互联/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/11/09/理解Spring中的依赖注入/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">理解Spring中的依赖注入</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/11/06/Docker下快速安装MySQL并使用数据卷容器/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Docker下快速安装MySQL并使用数据卷容器</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+<section class="comments" id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+    var disqus_shortname = 'true';
+    lazyScripts.push('//' + disqus_shortname + '.disqus.com/embed.js')
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢客官~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/deed.zh">知识共享 署名-非商业性使用 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>voidAlex &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://voidalex.one/2017/11/08/Docker容器间的互联/&title=《Docker容器间的互联》 — voidAlex的记事本&pic=https://voidalex.one/img/avatar.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://voidalex.one/2017/11/08/Docker容器间的互联/&title=《Docker容器间的互联》 — voidAlex的记事本&source=
+这是voidAlex原创的第十六篇博文。" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://voidalex.one/2017/11/08/Docker容器间的互联/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Docker容器间的互联》 — voidAlex的记事本&url=https://voidalex.one/2017/11/08/Docker容器间的互联/&via=https://voidalex.one" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://voidalex.one/2017/11/08/Docker容器间的互联/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACNUlEQVR42u3aQW7DMAwF0dz/0u42QGtlPukUEDVaBYFj63nBUCRfL7yut/X+ze9rfl9/99v1969vLBkyZGzLuJaLMO5+dfcs8nS+NxkyZJzDWD9y/XhyPb8/uY8MGTJkdLa1Dp1p0ilDhgwZNUZw6zCJTPEyZMg4jcHDJT/KpmB+TxkyZJzG4FX3///8lf6GDBkytmJc4aqlfbzZWdyVDBkyRjM6pbTOlZ3E8fYOMmTIGM2oFfc5pnYMJiMaD/QoZMiQsRWDHx15+b5zcE1TTBkyZMxm8KHVzqbTUBsnlzJkyBjKSH9WS9d4y7P4mmTIkDGaQQpYnQTu2yE7qMPJkCFjWwZpH/Ji3LOhOf7fkCFDxlBG2obkyLQwx0MwamHKkCHjMMZTgZKPYpCtoyfKkCFjBIOHwjRN5COwtdf0oTEgQ4aMoYynWozpYD1P9W7vLEOGjGMYvAHZb152WpjFCpwMGTI2Z5AErjaCn4bX1uytDBkyhjL6gfipTfPXF2BkyJAxiMEPkGlLMh01S8db/2gPyJAhYzSDl9hqAxb9BsOHApwMGTIOYHS2wjO0a7lagxoyZMgYyrjClY5BpMfUB3JbGTJkjGPUuoT8wNk5ANdaDjJkyJjKICGSB77adjsNAxkyZJzD6AS+2iZq/wAfzuIyZMiQER5Ta02CdJhDhgwZMtaBlRe/yIZSXis1lCFDxoYMPvSQtjDTUh0/AMuQIeMcBj868lAbF8vCZLTYyJQhQ8Z+jB/L0iy6C5j1cwAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '基佬快回来~';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '一起来van♂游戏吧';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

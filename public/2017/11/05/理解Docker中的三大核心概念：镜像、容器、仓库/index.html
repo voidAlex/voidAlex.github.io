@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>理解Docker中的三大核心概念：镜像、容器、仓库 | voidAlex的记事本 | 长路漫漫，唯剑作伴</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Docker">
+    <meta name="description" content="这是voidAlex原创的第十三篇博文。">
+<meta name="keywords" content="Docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="理解Docker中的三大核心概念：镜像、容器、仓库">
+<meta property="og:url" content="https://voidalex.one/2017/11/05/理解Docker中的三大核心概念：镜像、容器、仓库/index.html">
+<meta property="og:site_name" content="voidAlex的记事本">
+<meta property="og:description" content="这是voidAlex原创的第十三篇博文。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-11-05T14:29:29.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="理解Docker中的三大核心概念：镜像、容器、仓库">
+<meta name="twitter:description" content="这是voidAlex原创的第十三篇博文。">
+    
+        <link rel="alternate" type="application/atom+xml" title="voidAlex的记事本" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">voidAlex</h5>
+          <a href="mailto:wangld1994@gmail.com" title="wangld1994@gmail.com" class="mail">wangld1994@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签云
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/voidAlex" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                GitHub
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="http://www.weibo.com/wangld1994" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                微博
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-info"></i>
+                关于
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">理解Docker中的三大核心概念：镜像、容器、仓库</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">理解Docker中的三大核心概念：镜像、容器、仓库</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-11-05T07:17:27.000Z" itemprop="datePublished" class="page-time">
+  2017-11-05
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#镜像"><span class="post-toc-number">1.</span> <span class="post-toc-text">镜像</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#容器"><span class="post-toc-number">2.</span> <span class="post-toc-text">容器</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#仓库"><span class="post-toc-number">3.</span> <span class="post-toc-text">仓库</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-理解Docker中的三大核心概念：镜像、容器、仓库"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">理解Docker中的三大核心概念：镜像、容器、仓库</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-11-05 15:17:27" datetime="2017-11-05T07:17:27.000Z"  itemprop="datePublished">2017-11-05</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>这是voidAlex原创的第十三篇博文。<br><a id="more"></a></p>
+</blockquote>
+<h2 id="镜像"><a href="#镜像" class="headerlink" title="镜像"></a>镜像</h2><p> Docker镜像（Image）是一个特殊的文件系统，里面包含了容器运行时所需要的程序、库、资源、配置等文件和一些为运行时准备的配置参数，如匿名卷、环境变量、用户等。之所以说他特殊是因为它不会包含任何动态数据，其内容在构建之后也不会被改变。镜像可以是一个完整是操作系统，可以是一个数据库，可以是一个服务器，甚至可以只是一个WEB应用。</p>
+<p> Docker中的镜像并非是一个像ISO文件那样的打包文件，镜像只是一个虚拟的概念，实际体现并非由一个文件组成，而是由一组文件组成，或者说由多层文件联合组成。镜像在构建时，会一层一层构建，前一层是后一层的基础。每一层构建完就不会发生改变，后一层上的任何改变只是发生在自己这一层。分层存储的特征使得镜像的复用、定制变得更为容易。</p>
+<h2 id="容器"><a href="#容器" class="headerlink" title="容器"></a>容器</h2><p>容器（Container）的实质是进程，它是一个轻量级的沙箱，来隔离和运行应用。与直接在宿主机上执行的进程不同，容器的进程运行于自己独立的命名空间中。因此它可以拥有自己的进程空间、文件系统、网络空间、用户权限。容器内的进程运行在一个沙箱中，使用起来就好像一个独立于宿主的操作系统下操作一样。这种特性使得容器封装的应用运行更加安全。</p>
+<p>容器也使用分层存储。每个容器运行时都会以镜像为基础层，在其上创建一个当前容器的存储层。存储层的生命周期和容器一样，容器消亡时，容器存储层也会消亡。</p>
+<p>可以用面向对象程序设计中类和实例的关系来理解镜像和容器的关系。类和镜像都是静态的定义，容器和实例是运行时的实体，它们都可以被创建、删除，删除时，它们的数据也会随之消亡。</p>
+<p>容器所有的文件写入操作，都应该使用数据卷或者绑定宿主目录。数据卷的生命周期独立于容器，容器消亡，数据卷不会消亡。</p>
+<h2 id="仓库"><a href="#仓库" class="headerlink" title="仓库"></a>仓库</h2><p>仓库（Repository）类似于代码仓库，用来集中存储、分发镜像。根据所存储的镜像公开分享与否，仓库可以分为公开仓库和私有仓库。</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-11-05T14:29:29.000Z" itemprop="dateUpdated">2017-11-05 22:29:29</time>
+</span><br>
+
+
+        
+        原文链接：<a href="/2017/11/05/理解Docker中的三大核心概念：镜像、容器、仓库/" target="_blank" rel="external">https://voidalex.one/2017/11/05/理解Docker中的三大核心概念：镜像、容器、仓库/</a><br>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/deed.zh">知识共享 署名-非商业性 4.0 国际协议</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://voidalex.one">
+            <img src="/img/avatar.png" alt="voidAlex">
+            voidAlex
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://voidalex.one/2017/11/05/理解Docker中的三大核心概念：镜像、容器、仓库/&title=《理解Docker中的三大核心概念：镜像、容器、仓库》 — voidAlex的记事本&pic=https://voidalex.one/img/avatar.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://voidalex.one/2017/11/05/理解Docker中的三大核心概念：镜像、容器、仓库/&title=《理解Docker中的三大核心概念：镜像、容器、仓库》 — voidAlex的记事本&source=
+这是voidAlex原创的第十三篇博文。" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://voidalex.one/2017/11/05/理解Docker中的三大核心概念：镜像、容器、仓库/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《理解Docker中的三大核心概念：镜像、容器、仓库》 — voidAlex的记事本&url=https://voidalex.one/2017/11/05/理解Docker中的三大核心概念：镜像、容器、仓库/&via=https://voidalex.one" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://voidalex.one/2017/11/05/理解Docker中的三大核心概念：镜像、容器、仓库/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/11/06/CentOS7下安装Docker/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">CentOS 7下安装Docker并部署Spring Boot应用</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/11/04/Google-Java-Style-Guide在IntelliJ-IDEA中的配置/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Google Java Style Guide在IntelliJ IDEA中的配置</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+<section class="comments" id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+    var disqus_shortname = 'true';
+    lazyScripts.push('//' + disqus_shortname + '.disqus.com/embed.js')
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢客官~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/deed.zh">知识共享 署名-非商业性使用 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>voidAlex &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://voidalex.one/2017/11/05/理解Docker中的三大核心概念：镜像、容器、仓库/&title=《理解Docker中的三大核心概念：镜像、容器、仓库》 — voidAlex的记事本&pic=https://voidalex.one/img/avatar.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://voidalex.one/2017/11/05/理解Docker中的三大核心概念：镜像、容器、仓库/&title=《理解Docker中的三大核心概念：镜像、容器、仓库》 — voidAlex的记事本&source=
+这是voidAlex原创的第十三篇博文。" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://voidalex.one/2017/11/05/理解Docker中的三大核心概念：镜像、容器、仓库/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《理解Docker中的三大核心概念：镜像、容器、仓库》 — voidAlex的记事本&url=https://voidalex.one/2017/11/05/理解Docker中的三大核心概念：镜像、容器、仓库/&via=https://voidalex.one" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://voidalex.one/2017/11/05/理解Docker中的三大核心概念：镜像、容器、仓库/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPYAAAD2CAAAAADAeSUUAAADO0lEQVR42u3aQU7kQBAEQP7/6Vlpr4CdWW0E3RM+od3B4zCHVFb1x0d8vf5f1z9/91ufP//5t64/c/0v18+wdGFjY2Nvwn5dXu0Xt/e5fk3Jq0m+/Yt7YmNjYx/Hnn1Nfofkf/PXd/3HiJ4EGxsb+y3ZM0BSZvJwyj+DjY2Njb0ySGpLTlJIsLGxsbGv2e3DtezZfdr68SOzNGxsbOw/z35q0fsXfv6F/TY2Njb2r7Jf5bVy7CZ/xJXqEimwsbGxD2LPBjTJ8Zp2xJMXmDa6igaGjY2NvSE7P2SZ3K5dyq6UinbkhI2NjX02OwmzJH7ySMuDZ1ZybiIZGxsb+zj2bEyTw9pFch6Zs2KDjY2NfR67jY1hASiP+OQhmt/hJrexsbGxN2QP9wllLckjbfYkefjVB3qwsbGxN2HngZG/gpXiMVsttEsLbGxs7DPYyYp3fTQ/WxW3Q65iEIaNjY19ELsNp5XjNe06th1L5YeHsLGxsU9lF4vSsk60A6mVgz7FM2BjY2MfxM6PxSRRMYu6lRhbj0BsbGzsfdn5QZzZqGj2svKX3o7DsLGxsU9lt6uCWSVIHndWhPJv/3bRi42Njb0tezZUSspGHnXPjqLqRS82Njb2Qez1RW+0Xh1VkfX7YGNjY5/KzsHri4QVdltjblzY2NjYb8CejXuS5W5ebGZr42ilgY2NjX0ce+UwTTGOH9WJtuoUVQQbGxv7IHYePEldaUvCyigqrys3uY2NjY29LbsNpLyEJHUiLxv5UaEibrGxsbGPYLej/9naoD2aM1sY5KMlbGxs7JPYeVWYHaN5CpnXpHxEhY2NjX0Guy0DM/bKIZvoLxaPnL6YpWFjY2Mfx25HPw8coCnDabbuvQkwbGxs7G3Z7WGadjSf/24y3M/vUzcwbGxs7G3Zr/JqFwBtyM2WE20oYmNjY5/EbsNgBsvvkIToetBiY2Njn8eehVYSQu0QPxkVzfbYdSHBxsbG3pA9e8R8yTobP63XjGKKho2Njf0G7GTVmiPbVW4+hIqiFxsbGxs7rjGzGHuqkGBjY2O/D3u23F05UvMTS+KiqGBjY2MfxG4fLgmep+pHHmazgRc2Njb25ux/m781AGae39cAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '基佬快回来~';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '一起来van♂游戏吧';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

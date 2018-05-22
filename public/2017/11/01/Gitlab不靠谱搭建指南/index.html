@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Gitlab不靠谱搭建指南 | voidAlex的记事本 | 长路漫漫，唯剑作伴</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="配置,Gitlab">
+    <meta name="description" content="在Ubuntu 16.04下快速搭建Gitlab并汉化。这是voidAlex原创的第八篇博文。">
+<meta name="keywords" content="配置,Gitlab">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Gitlab不靠谱搭建指南">
+<meta property="og:url" content="https://voidalex.one/2017/11/01/Gitlab不靠谱搭建指南/index.html">
+<meta property="og:site_name" content="voidAlex的记事本">
+<meta property="og:description" content="在Ubuntu 16.04下快速搭建Gitlab并汉化。这是voidAlex原创的第八篇博文。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-11-10T09:27:45.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Gitlab不靠谱搭建指南">
+<meta name="twitter:description" content="在Ubuntu 16.04下快速搭建Gitlab并汉化。这是voidAlex原创的第八篇博文。">
+    
+        <link rel="alternate" type="application/atom+xml" title="voidAlex的记事本" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">voidAlex</h5>
+          <a href="mailto:wangld1994@gmail.com" title="wangld1994@gmail.com" class="mail">wangld1994@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签云
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/voidAlex" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                GitHub
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="http://www.weibo.com/wangld1994" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                微博
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-info"></i>
+                关于
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Gitlab不靠谱搭建指南</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Gitlab不靠谱搭建指南</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-11-01T11:20:34.000Z" itemprop="datePublished" class="page-time">
+  2017-11-01
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#配置ip"><span class="post-toc-number">1.</span> <span class="post-toc-text">配置ip</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#使用ifconfig查看网卡名称，然后修改配置文件"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">使用ifconfig查看网卡名称，然后修改配置文件</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#修改-etc-network-interfaces"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">修改/etc/network/interfaces</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#重启网络，使之生效："><span class="post-toc-number">1.3.</span> <span class="post-toc-text">重启网络，使之生效：</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#配置DNS："><span class="post-toc-number">1.4.</span> <span class="post-toc-text">配置DNS：</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#重启网络"><span class="post-toc-number">1.5.</span> <span class="post-toc-text">重启网络</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#更新apt，安装ssh和git"><span class="post-toc-number">2.</span> <span class="post-toc-text">更新apt，安装ssh和git</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#安装Gitlab并配置依赖关系"><span class="post-toc-number">3.</span> <span class="post-toc-text">安装Gitlab并配置依赖关系</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#安装邮件服务器："><span class="post-toc-number">3.1.</span> <span class="post-toc-text">安装邮件服务器：</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#配置安装源："><span class="post-toc-number">3.2.</span> <span class="post-toc-text">配置安装源：</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#安装Gitlab并初始化"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">安装Gitlab并初始化</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#修改host"><span class="post-toc-number">3.4.</span> <span class="post-toc-text">修改host</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#汉化Gitlab"><span class="post-toc-number">4.</span> <span class="post-toc-text">汉化Gitlab</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#确定Gitlab的版本"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">确定Gitlab的版本</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#clone汉化版本库"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">clone汉化版本库</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#导出diff文件并补丁"><span class="post-toc-number">4.3.</span> <span class="post-toc-text">导出diff文件并补丁</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#重启Gitlab"><span class="post-toc-number">4.4.</span> <span class="post-toc-text">重启Gitlab</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#备份"><span class="post-toc-number">5.</span> <span class="post-toc-text">备份</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#手动备份"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">手动备份</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#自动备份"><span class="post-toc-number">5.2.</span> <span class="post-toc-text">自动备份</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#恢复"><span class="post-toc-number">5.3.</span> <span class="post-toc-text">恢复</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-Gitlab不靠谱搭建指南"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Gitlab不靠谱搭建指南</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-11-01 19:20:34" datetime="2017-11-01T11:20:34.000Z"  itemprop="datePublished">2017-11-01</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>在Ubuntu 16.04下快速搭建Gitlab并汉化。<br>这是voidAlex原创的第八篇博文。<br><a id="more"></a></p>
+</blockquote>
+<h2 id="配置ip"><a href="#配置ip" class="headerlink" title="配置ip"></a>配置ip</h2><h3 id="使用ifconfig查看网卡名称，然后修改配置文件"><a href="#使用ifconfig查看网卡名称，然后修改配置文件" class="headerlink" title="使用ifconfig查看网卡名称，然后修改配置文件"></a>使用<code>ifconfig</code>查看网卡名称，然后修改配置文件</h3><h3 id="修改-etc-network-interfaces"><a href="#修改-etc-network-interfaces" class="headerlink" title="修改/etc/network/interfaces"></a>修改<code>/etc/network/interfaces</code></h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vi /etc/network/interfaces</div></pre></td></tr></table></figure>
+<p>将内容修改为：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">auto ens33</div><div class="line">iface ens33 inet static</div><div class="line">address 202.201.53.159</div><div class="line">gateway 202.201.53.128</div><div class="line">netmask 255.255.255.0</div></pre></td></tr></table></figure>
+<h3 id="重启网络，使之生效："><a href="#重启网络，使之生效：" class="headerlink" title="重启网络，使之生效："></a>重启网络，使之生效：</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo /etc/init.d/networking restart</div></pre></td></tr></table></figure>
+<h3 id="配置DNS："><a href="#配置DNS：" class="headerlink" title="配置DNS："></a>配置DNS：</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vi /etc/resolvconf/resolv.conf.d/base</div></pre></td></tr></table></figure>
+<p>添加：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">nameserver 223.5.5.5</div><div class="line">nameserver 223.6.6.6</div></pre></td></tr></table></figure>
+<p>保存后执行：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">resolvconf -u</div></pre></td></tr></table></figure>
+<h3 id="重启网络"><a href="#重启网络" class="headerlink" title="重启网络"></a>重启网络</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo ifdown ens33 &amp;&amp; sudo ifup ens33</div></pre></td></tr></table></figure>
+<h2 id="更新apt，安装ssh和git"><a href="#更新apt，安装ssh和git" class="headerlink" title="更新apt，安装ssh和git"></a>更新apt，安装ssh和git</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo apt-get update</div><div class="line">sudo apt install ssh</div><div class="line">sudo apt install git</div></pre></td></tr></table></figure>
+<p>测试ssh安装是否成功：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh localhost</div></pre></td></tr></table></figure>
+<h2 id="安装Gitlab并配置依赖关系"><a href="#安装Gitlab并配置依赖关系" class="headerlink" title="安装Gitlab并配置依赖关系"></a>安装Gitlab并配置依赖关系</h2><h3 id="安装邮件服务器："><a href="#安装邮件服务器：" class="headerlink" title="安装邮件服务器："></a>安装邮件服务器：</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install curl openssh-server ca-certificates postfix</div></pre></td></tr></table></figure>
+<h3 id="配置安装源："><a href="#配置安装源：" class="headerlink" title="配置安装源："></a>配置安装源：</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | sudo bash</div></pre></td></tr></table></figure>
+<h3 id="安装Gitlab并初始化"><a href="#安装Gitlab并初始化" class="headerlink" title="安装Gitlab并初始化"></a>安装Gitlab并初始化</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo apt install gitlab-ce</div><div class="line">sudo gitlab-ctl reconfigure</div></pre></td></tr></table></figure>
+<h3 id="修改host"><a href="#修改host" class="headerlink" title="修改host"></a>修改host</h3><p>修改<code>/etc/gitlab/gitlab.rb</code>中的<code>external_url</code>：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">external_url <span class="string">'http://nwnu.git.com'</span></div></pre></td></tr></table></figure>
+<p>在<code>/etc/hosts</code>中添加hosts映射：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">127.0.0.1   nwnu.git.com</div></pre></td></tr></table></figure>
+<p>让Gitlab配置生效：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo gitlab-ctl reconfigure</div></pre></td></tr></table></figure>
+<h2 id="汉化Gitlab"><a href="#汉化Gitlab" class="headerlink" title="汉化Gitlab"></a>汉化Gitlab</h2><h3 id="确定Gitlab的版本"><a href="#确定Gitlab的版本" class="headerlink" title="确定Gitlab的版本"></a>确定Gitlab的版本</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo cat /opt/gitlab/embedded/service/gitlab-rails/VERSION</div></pre></td></tr></table></figure>
+<h3 id="clone汉化版本库"><a href="#clone汉化版本库" class="headerlink" title="clone汉化版本库"></a>clone汉化版本库</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git <span class="built_in">clone</span> https://gitlab.com/xhang/gitlab.git</div></pre></td></tr></table></figure>
+<h3 id="导出diff文件并补丁"><a href="#导出diff文件并补丁" class="headerlink" title="导出diff文件并补丁"></a>导出diff文件并补丁</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo git diff v10.1.0 v10.1.0-zh &gt; ../10.1.0-zh.diff</div><div class="line">sudo gitlab-ctl stop</div><div class="line">sudo patch <span class="_">-d</span> /opt/gitlab/embedded/service/gitlab-rails -p1 &lt; 10.1.0-zh.diff</div></pre></td></tr></table></figure>
+<h3 id="重启Gitlab"><a href="#重启Gitlab" class="headerlink" title="重启Gitlab"></a>重启Gitlab</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo gitlab-ctl start</div><div class="line">sudo gitlab-ctl reconfigure</div></pre></td></tr></table></figure>
+<h2 id="备份"><a href="#备份" class="headerlink" title="备份"></a>备份</h2><p>Gitlab默认的备份目录在<code>/var/opt/gitlab/backups</code>。</p>
+<h3 id="手动备份"><a href="#手动备份" class="headerlink" title="手动备份"></a>手动备份</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo gitlab-rake gitlab:backup:create</div></pre></td></tr></table></figure>
+<h3 id="自动备份"><a href="#自动备份" class="headerlink" title="自动备份"></a>自动备份</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 每天2点备份</span></div><div class="line">0 2 * * * /opt/gitlab/bin/gitlab-rake gitlab:backup:create CRON=1</div></pre></td></tr></table></figure>
+<h3 id="恢复"><a href="#恢复" class="headerlink" title="恢复"></a>恢复</h3><p>恢复之前，确保备份文件所安装 GitLab 和当前要恢复的 GitLab 版本一致。首先，恢复配置文件：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo mv /etc/gitlab /etc/gitlab.$(date +%s)</div><div class="line"><span class="comment"># 将下面配置备份文件的时间戳改为你所备份的文件的时间戳</span></div><div class="line">sudo tar -xf etc-gitlab-1399948539.tar -C /</div></pre></td></tr></table></figure>
+<p>恢复数据文件：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 将数据备份文件拷贝至备份目录</span></div><div class="line">sudo cp 1393513186_gitlab_backup.tar /var/opt/gitlab/backups/</div><div class="line"></div><div class="line"><span class="comment"># 停止连接数据库的进程</span></div><div class="line">sudo gitlab-ctl stop unicorn</div><div class="line">sudo gitlab-ctl stop sidekiq</div><div class="line"></div><div class="line"><span class="comment"># 恢复1393513186这个备份文件，将覆盖GitLab数据库！</span></div><div class="line">sudo gitlab-rake gitlab:backup:restore BACKUP=1393513186</div><div class="line"></div><div class="line"><span class="comment"># 启动 GitLab</span></div><div class="line">sudo gitlab-ctl start</div><div class="line"></div><div class="line"><span class="comment"># 检查 GitLab</span></div><div class="line">sudo gitlab-rake gitlab:check SANITIZE=<span class="literal">true</span></div></pre></td></tr></table></figure>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-11-10T09:27:45.000Z" itemprop="dateUpdated">2017-11-10 17:27:45</time>
+</span><br>
+
+
+        
+        原文链接：<a href="/2017/11/01/Gitlab不靠谱搭建指南/" target="_blank" rel="external">https://voidalex.one/2017/11/01/Gitlab不靠谱搭建指南/</a><br>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/deed.zh">知识共享 署名-非商业性 4.0 国际协议</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://voidalex.one">
+            <img src="/img/avatar.png" alt="voidAlex">
+            voidAlex
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Gitlab/">Gitlab</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/配置/">配置</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://voidalex.one/2017/11/01/Gitlab不靠谱搭建指南/&title=《Gitlab不靠谱搭建指南》 — voidAlex的记事本&pic=https://voidalex.one/img/avatar.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://voidalex.one/2017/11/01/Gitlab不靠谱搭建指南/&title=《Gitlab不靠谱搭建指南》 — voidAlex的记事本&source=
+在Ubuntu 16.04下快速搭建Gitlab并汉化。这是voidAlex原创的第八篇博文。" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://voidalex.one/2017/11/01/Gitlab不靠谱搭建指南/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Gitlab不靠谱搭建指南》 — voidAlex的记事本&url=https://voidalex.one/2017/11/01/Gitlab不靠谱搭建指南/&via=https://voidalex.one" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://voidalex.one/2017/11/01/Gitlab不靠谱搭建指南/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/11/02/Java补锅笔记：反射机制/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Java补锅笔记：反射机制</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/08/21/算法笔记：Top-N算法及Java实现/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">算法笔记：Top-N算法及Java实现</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+<section class="comments" id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+    var disqus_shortname = 'true';
+    lazyScripts.push('//' + disqus_shortname + '.disqus.com/embed.js')
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢客官~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/deed.zh">知识共享 署名-非商业性使用 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>voidAlex &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://voidalex.one/2017/11/01/Gitlab不靠谱搭建指南/&title=《Gitlab不靠谱搭建指南》 — voidAlex的记事本&pic=https://voidalex.one/img/avatar.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://voidalex.one/2017/11/01/Gitlab不靠谱搭建指南/&title=《Gitlab不靠谱搭建指南》 — voidAlex的记事本&source=
+在Ubuntu 16.04下快速搭建Gitlab并汉化。这是voidAlex原创的第八篇博文。" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://voidalex.one/2017/11/01/Gitlab不靠谱搭建指南/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Gitlab不靠谱搭建指南》 — voidAlex的记事本&url=https://voidalex.one/2017/11/01/Gitlab不靠谱搭建指南/&via=https://voidalex.one" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://voidalex.one/2017/11/01/Gitlab不靠谱搭建指南/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACJUlEQVR42u3aSW7DMBAEwPz/0841QCCneygbMVk8GYYgsXQYzcKvr3g9fq3f/19d//Of2d1uWxgYGB/LeDxd7XaTZyVPz/eGgYFxDuP5I5NrWtjzrbfPxcDAwHi+rSRAJ6EWAwMD4y5GUprOEsoEj4GBcTIjKSbf0/N7eS2OgYHxgYzZrd/z+yXzDQwMjI9iPMqVpIB5+dre7fIpGBgYWzPyALdCyttzs/1gYGCcw5gF0PaQRNuwS0I2BgbGOYy7hgR5kF0fElx+NzAwMLZjtMcs8mZ9Xr7ePADAwMDYlJGHs7xwXUkrZ68YAwNjP8arA2t+fXvw4q3fBwwMjH/DqBvxC9na+pWXARcDA2M7xl3tsLb1376mfFcYGBj7MdqtzxLHPGWcldAYGBh7M/LNJex2ANluvcBgYGBsxMiPSrQtudmrmSWIGBgY5zCGk8+F9tnseNmwS4eBgfGxjNl228evHFqtXz0GBsYxjKQ1lgOSxlmbLP5RhWNgYGzHyMeN944t8/AdYTAwMI5htAF31m5rRwhRKMfAwDiM0eaVRQZaHrmop68YGBjbMR7lascJ+WDyeVL4R7qJgYGxNaOdDOZhNN9uW9YujTkxMDA+ljELsrPr20FmMc7EwMA4gNEev5gNJte/AJdIDAwMjIWR5Kydd8NpEQwMjOMZK6nhjBcVsRgYGFszkm3lsLbcnQ1NMTAwzmHkpeNsGJC30trXhIGBcQDjG6Z4nTub21LAAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '基佬快回来~';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '一起来van♂游戏吧';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
