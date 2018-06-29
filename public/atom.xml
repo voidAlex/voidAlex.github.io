@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://voidalex.one/"/>
-  <updated>2018-05-22T14:18:02.744Z</updated>
+  <updated>2018-02-21T09:31:01.149Z</updated>
   <id>https://voidalex.one/</id>
   
   <author>
@@ -15,28 +15,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>test</title>
-    <link href="https://voidalex.one/2018/05/22/test/"/>
-    <id>https://voidalex.one/2018/05/22/test/</id>
-    <published>2018-05-22T06:18:01.000Z</published>
-    <updated>2018-05-22T14:18:02.744Z</updated>
-    
-    <content type="html"><![CDATA[<p>test</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;test&lt;/p&gt;
-
-      
-    
-    </summary>
-    
-    
-  </entry>
   
   <entry>
     <title>一种在服务器上部署Hexo博客的思路</title>
