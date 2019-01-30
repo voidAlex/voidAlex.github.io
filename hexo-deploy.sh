@@ -1,3 +1,3 @@
-#!/usr/bin/env sh
-hexo g -d
+#!/bin/bash
+./node_modules/hexo/bin/hexo g -d
 

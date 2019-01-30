@@ -1,2 +1,2 @@
 #!/bin/bash
-nohup hexo s -s &
+nohup ./node_modules/hexo/bin/hexo s -s &
